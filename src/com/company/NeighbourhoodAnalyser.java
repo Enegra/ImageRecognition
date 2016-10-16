@@ -10,13 +10,17 @@ import java.util.ArrayList;
 public class NeighbourhoodAnalyser {
 
     ArrayList<KeyPoint> searchNeighbours(ArrayList<KeyPoint> keyPoints, KeyPoint chosenPoint, int neighbourhoodSize){
+        ArrayList<KeyPoint> neighbours = new ArrayList<KeyPoint>(neighbourhoodSize);
         ArrayList<Double> distances = new ArrayList<Double>(keyPoints.size());
         for (KeyPoint keyPoint : keyPoints){
             double distance = Math.euclideanDistance(keyPoint, chosenPoint);
             distances.add(distance);
         }
         quickSort(distances, keyPoints);
-        return null;
+        for (int i=1; i<neighbourhoodSize+1; i++){
+            neighbours.add(keyPoints.get(i));
+        }
+        return neighbours;
     }
 
     void quickSort(ArrayList<Double> unsortedArray, ArrayList<KeyPoint> keypoints) {
