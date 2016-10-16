@@ -5,9 +5,9 @@ package com.company;
  */
 public class KeyPoint {
 
-    double x;
-    double y;
-    int[] traits;
+    private double x;
+    private double y;
+    private int[] traits;
 
     KeyPoint(double x, double y){
         this.x = x;
@@ -27,11 +27,11 @@ public class KeyPoint {
         return traits[index];
     }
 
-    double getX(){
+    public double getX(){
         return x;
     }
 
-    double getY(){
+    public double getY(){
         return y;
     }
 

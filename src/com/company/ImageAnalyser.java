@@ -1,5 +1,7 @@
 package com.company;
 
+import com.company.util.Math;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -46,11 +48,11 @@ public class ImageAnalyser {
     ArrayList<ArrayList<KeyPoint>> pairKeypoints(ArrayList<KeyPoint> firstImageKeyPoints, ArrayList<KeyPoint> secondImageKeypoints){
         ArrayList<ArrayList<KeyPoint>> pairedKeypoints = new ArrayList<ArrayList<KeyPoint>>();
         for (int i=0; i<firstImageKeyPoints.size(); i++){
-            double minimum = euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(0).getTraits());
+            double minimum = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(0).getTraits());
             KeyPoint match = secondImageKeypoints.get(0);
             boolean obscure = false;
             for (int j=1; i<secondImageKeypoints.size(); j++){
-                double distance = euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(j).getTraits());
+                double distance = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(j).getTraits());
                 if (distance < minimum){
                     obscure = false;
                     minimum = distance;
@@ -69,19 +71,5 @@ public class ImageAnalyser {
         }
         return pairedKeypoints;
     }
-
-    private double euclideanDistance(int[] p, int[] q){
-        if (p.length == q.length){
-            double sum=0;
-            for (int i=0; i<p.length; i++){
-                double difference = p[i] - q[i];
-                sum = sum + difference*difference;
-            }
-            return Math.sqrt(sum);
-        }
-        return 0;
-    }
-
-
 
 }

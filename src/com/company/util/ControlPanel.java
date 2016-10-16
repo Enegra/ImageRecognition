@@ -9,7 +9,7 @@ import java.io.File;
 /**
  * Created by agnie on 10/7/2016.
  */
-public class ControlPanel extends JPanel {
+class ControlPanel extends JPanel {
 
     private UserInterface userInterface;
     private JLabel imageOneLabel, imageOneName, imageTwoLabel, imageTwoName, loadImageButtonLabel, analyzeButtonLabel;

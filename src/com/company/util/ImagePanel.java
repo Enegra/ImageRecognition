@@ -11,8 +11,8 @@ import java.io.IOException;
  */
 public class ImagePanel extends JPanel {
 
-    int panelWidth;
-    int panelHeight;
+    private int panelWidth;
+    private int panelHeight;
 
     ImagePanel(int panelWidth, int panelHeight){
         this.panelWidth = panelWidth;
