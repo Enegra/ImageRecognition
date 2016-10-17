@@ -20,7 +20,7 @@ public class ImageAnalyser {
                 String lineArray[] = line.split("\\s+");
                 if (lineArray.length>1){
                     double x = Double.parseDouble(lineArray[0]);
-                    double y = Integer.parseInt(lineArray[1]);
+                    double y = Double.parseDouble(lineArray[1]);
                     KeyPoint keyPoint = new KeyPoint(x,y);
                     for (int i=5; i<lineArray.length; i++){
                         keyPoint.setTrait(i-5, Integer.parseInt(lineArray[i]));
@@ -51,7 +51,7 @@ public class ImageAnalyser {
             double minimum = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(0).getTraits());
             KeyPoint match = secondImageKeypoints.get(0);
             boolean obscure = false;
-            for (int j=1; i<secondImageKeypoints.size(); j++){
+            for (int j=1; j<secondImageKeypoints.size(); j++){
                 double distance = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(j).getTraits());
                 if (distance < minimum){
                     obscure = false;

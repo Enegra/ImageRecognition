@@ -7,9 +7,9 @@ import java.io.File;
 /**
  * Created by agnie on 10/7/2016.
  */
-class FilePicker {
+public class FilePicker {
 
-    File getFilePath() {
+    public File getFilePath() {
         JFrame frame = new JFrame();
         FileDialog fileDialog = new FileDialog(frame, "Import picture", FileDialog.LOAD);
         fileDialog.setVisible(true);

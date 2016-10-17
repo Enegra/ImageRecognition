@@ -78,9 +78,9 @@ public class NeighbourhoodAnalyser {
         return coherence>=threshold;
     }
 
-    ArrayList<ArrayList<KeyPoint>> coherentPairs(ArrayList<ArrayList<KeyPoint>> pairedKeypoints, int neighbourhoodSize, double threshold){
+    ArrayList<ArrayList<KeyPoint>> coherentPairs(int neighbourhoodSize, double threshold){
         ArrayList<ArrayList<KeyPoint>> coherentPairs = new ArrayList<ArrayList<KeyPoint>>();
-        for (ArrayList<KeyPoint> pair : pairedKeypoints){
+        for (ArrayList<KeyPoint> pair : pairedKeyPoints){
             if (isCoherent(pair, neighbourhoodSize, threshold)){
                 coherentPairs.add(pair);
             }
