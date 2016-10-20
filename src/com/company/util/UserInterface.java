@@ -44,8 +44,8 @@ public class UserInterface extends JFrame {
         imagePanel.setVisible(true);
     }
 
-    void displayFirstImage(File imageFile){
-        imagePanel.drawImage(imageFile);
+    void displayFirstImage(File imageFile, int number){
+        imagePanel.drawImage(imageFile, number);
     }
 
     void analyzeImages(File imageOne, File imageTwo){
