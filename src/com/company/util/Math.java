@@ -24,4 +24,5 @@ public class Math {
         double yDistance = p.getY() - q.getY();
         return java.lang.Math.sqrt(xDistance*xDistance + yDistance*yDistance);
     }
+
 }
