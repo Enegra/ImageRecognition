@@ -13,6 +13,8 @@ public class ImagePanel extends JPanel {
 
     private int panelWidth;
     private int panelHeight;
+    private JLabel imageOneLabel;
+    private JLabel imageTwoLabel;
 
     ImagePanel(int panelWidth, int panelHeight){
         this.panelWidth = panelWidth;
@@ -24,21 +26,29 @@ public class ImagePanel extends JPanel {
         this.setSize(panelWidth,panelHeight);
     }
 
-    void drawImage(File file){
-        clearPanel();
+    void drawImage(File file, int number){
         try {
             BufferedImage bufferedImage = ImageIO.read(file);
-            JLabel imageLabel = new JLabel(new ImageIcon(bufferedImage));
-            this.add(imageLabel);
+            if (number==0){
+                if (imageOneLabel!=null){
+                    this.remove(imageOneLabel);
+                }
+                JLabel imageOneLabel = new JLabel(new ImageIcon(bufferedImage));
+                this.add(imageOneLabel);
+            }
+            else {
+                if (imageTwoLabel!=null){
+                    this.remove(imageTwoLabel);
+                }
+                JLabel imageTwoLabel = new JLabel(new ImageIcon(bufferedImage));
+                this.add(imageTwoLabel);
+            }
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-    private void clearPanel(){
-        this.removeAll();
-    }
 
 }
