@@ -31,7 +31,7 @@ public class NeighbourhoodAnalyser {
         return neighbours;
     }
 
-    void quickSort(ArrayList<Double> unsortedArray) {
+    private void quickSort(ArrayList<Double> unsortedArray) {
         quickSort(unsortedArray, pairedKeyPoints, 0, unsortedArray.size() - 1);
     }
 

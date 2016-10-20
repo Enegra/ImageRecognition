@@ -20,7 +20,9 @@ public class Main {
         NeighbourhoodAnalyser neighbourhoodAnalyser = new NeighbourhoodAnalyser(pairedKeypoints);
         int neighbourhoodSize = (int)pairedKeypoints.size()/50;
         ArrayList<ArrayList<KeyPoint>> coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, 0.6);
-        double coherence = coherentPairs.size()/pairedKeypoints.size();
+        double coherence = (double) coherentPairs.size() / (double) firstImageKeypoints.size();
+        System.out.println(coherentPairs.size());
+        System.out.println(firstImageKeypoints.size());
         System.out.println("COHERENCE: " + coherence);
 
 
