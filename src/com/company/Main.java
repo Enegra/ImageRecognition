@@ -1,7 +1,6 @@
 package com.company;
 
 import com.company.util.FilePicker;
-import com.company.util.UserInterface;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ public class Main {
         int imageHeight = 440;
         double smallRadius = 0.01 * imageHeight;
         double largeRadius = 0.3 * imageHeight;
-        int errorThreshold = 10;
+        int errorThreshold = 50;
 //        UserInterface userInterface = new UserInterface();
         ImageAnalyser imageAnalyser = new ImageAnalyser();
         FilePicker filePicker = new FilePicker();
@@ -31,8 +30,8 @@ public class Main {
 //        System.out.println("COHERENCE: " + coherence);
 
         RANSAC ransac = new RANSAC(pairedKeypoints, smallRadius, largeRadius, errorThreshold, 100);
-        ArrayList<ArrayList<KeyPoint>> matchingPairs = ransac.getMatchingPairs(0);
-        System.out.println(matchingPairs);
+        ArrayList<ArrayList<KeyPoint>> matchingPairs = ransac.getMatchingPairs(1);
+
 
 
 
