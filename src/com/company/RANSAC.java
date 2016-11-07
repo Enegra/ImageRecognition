@@ -105,12 +105,12 @@ class RANSAC {
             startingPoints = getStartingPoints(startingPoints);
         }
         double[][] firstMatrixData = {
-                {startingPoints.get(0).get(0).getX(), startingPoints.get(0).get(0).getX(), 1, 0, 0, 0},
-                {startingPoints.get(1).get(0).getX(), startingPoints.get(1).get(0).getX(), 1, 0, 0, 0},
-                {startingPoints.get(2).get(0).getX(), startingPoints.get(2).get(0).getX(), 1, 0, 0, 0},
-                {0, 0, 0, startingPoints.get(0).get(0).getX(), startingPoints.get(0).get(0).getX(), 1},
-                {0, 0, 0, startingPoints.get(1).get(0).getX(), startingPoints.get(1).get(0).getX(), 1},
-                {0, 0, 0, startingPoints.get(2).get(0).getX(), startingPoints.get(2).get(0).getX(), 1},
+                {startingPoints.get(0).get(0).getX(), startingPoints.get(0).get(0).getY(), 1, 0, 0, 0},
+                {startingPoints.get(1).get(0).getX(), startingPoints.get(1).get(0).getY(), 1, 0, 0, 0},
+                {startingPoints.get(2).get(0).getX(), startingPoints.get(2).get(0).getY(), 1, 0, 0, 0},
+                {0, 0, 0, startingPoints.get(0).get(0).getX(), startingPoints.get(0).get(0).getY(), 1},
+                {0, 0, 0, startingPoints.get(1).get(0).getX(), startingPoints.get(1).get(0).getY(), 1},
+                {0, 0, 0, startingPoints.get(2).get(0).getX(), startingPoints.get(2).get(0).getY(), 1},
 
         };
         double[][] secondMatrixData = {
@@ -140,10 +140,10 @@ class RANSAC {
             startingPoints = getStartingPoints(startingPoints);
         }
         double[][] firstMatrixData = {
-                {startingPoints.get(0).get(0).getX(), startingPoints.get(0).get(0).getX(), 1, 0, 0, 0, -startingPoints.get(0).get(1).getX() * startingPoints.get(0).get(0).getX(), -startingPoints.get(0).get(1).getX() * startingPoints.get(0).get(0).getY()},
-                {startingPoints.get(1).get(0).getX(), startingPoints.get(1).get(0).getX(), 1, 0, 0, 0, -startingPoints.get(1).get(1).getX() * startingPoints.get(1).get(0).getX(), -startingPoints.get(1).get(1).getX() * startingPoints.get(1).get(0).getY()},
-                {startingPoints.get(2).get(0).getX(), startingPoints.get(2).get(0).getX(), 1, 0, 0, 0, -startingPoints.get(2).get(1).getX() * startingPoints.get(2).get(0).getX(), -startingPoints.get(2).get(1).getX() * startingPoints.get(2).get(0).getY()},
-                {startingPoints.get(3).get(0).getX(), startingPoints.get(3).get(0).getX(), 1, 0, 0, 0, -startingPoints.get(3).get(1).getX() * startingPoints.get(3).get(0).getX(), -startingPoints.get(3).get(1).getX() * startingPoints.get(3).get(0).getY()},
+                {startingPoints.get(0).get(0).getX(), startingPoints.get(0).get(0).getY(), 1, 0, 0, 0, -startingPoints.get(0).get(1).getX() * startingPoints.get(0).get(0).getX(), -startingPoints.get(0).get(1).getX() * startingPoints.get(0).get(0).getY()},
+                {startingPoints.get(1).get(0).getX(), startingPoints.get(1).get(0).getY(), 1, 0, 0, 0, -startingPoints.get(1).get(1).getX() * startingPoints.get(1).get(0).getX(), -startingPoints.get(1).get(1).getX() * startingPoints.get(1).get(0).getY()},
+                {startingPoints.get(2).get(0).getX(), startingPoints.get(2).get(0).getY(), 1, 0, 0, 0, -startingPoints.get(2).get(1).getX() * startingPoints.get(2).get(0).getX(), -startingPoints.get(2).get(1).getX() * startingPoints.get(2).get(0).getY()},
+                {startingPoints.get(3).get(0).getX(), startingPoints.get(3).get(0).getY(), 1, 0, 0, 0, -startingPoints.get(3).get(1).getX() * startingPoints.get(3).get(0).getX(), -startingPoints.get(3).get(1).getX() * startingPoints.get(3).get(0).getY()},
                 {0, 0, 0, startingPoints.get(0).get(0).getX(), startingPoints.get(0).get(0).getX(), 1, -startingPoints.get(0).get(1).getY() * startingPoints.get(0).get(0).getX(), -startingPoints.get(0).get(1).getY() * startingPoints.get(0).get(0).getY()},
                 {0, 0, 0, startingPoints.get(1).get(0).getX(), startingPoints.get(1).get(0).getX(), 1, -startingPoints.get(1).get(1).getY() * startingPoints.get(1).get(0).getX(), -startingPoints.get(1).get(1).getY() * startingPoints.get(1).get(0).getY()},
                 {0, 0, 0, startingPoints.get(2).get(0).getX(), startingPoints.get(2).get(0).getX(), 1, -startingPoints.get(2).get(1).getY() * startingPoints.get(2).get(0).getX(), -startingPoints.get(2).get(1).getY() * startingPoints.get(2).get(0).getY()},

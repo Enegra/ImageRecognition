@@ -88,7 +88,7 @@ class ControlPanel extends JPanel {
                     imageTwoLabel.setVisible(true);
                     imageTwoName.setVisible(true);
                     imageTwoButton.setVisible(true);
-                    userInterface.displayFirstImage(imageOne);
+                    userInterface.displayFirstImage(imageOne,0);
                 }
             }
         });
