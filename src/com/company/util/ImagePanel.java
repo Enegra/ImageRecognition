@@ -15,6 +15,8 @@ public class ImagePanel extends JPanel {
     private int panelHeight;
     private JLabel imageOneLabel;
     private JLabel imageTwoLabel;
+    private int imageOneScaleFactor = 0;
+    private int imageTwoScaleFactor = 0;
 
     ImagePanel(int panelWidth, int panelHeight){
         this.panelWidth = panelWidth;
@@ -29,6 +31,9 @@ public class ImagePanel extends JPanel {
     void drawImage(File file, int number){
         try {
             BufferedImage bufferedImage = ImageIO.read(file);
+            if (bufferedImage.getHeight() > 400 || bufferedImage.getWidth() > 1000){
+                //todo
+            }
             if (number==0){
                 if (imageOneLabel!=null){
                     this.remove(imageOneLabel);
@@ -50,5 +55,12 @@ public class ImagePanel extends JPanel {
         }
     }
 
+    int getImageOneScaleFactor(){
+        return imageOneScaleFactor;
+    }
+
+    int getImageTwoScaleFactor(){
+        return imageTwoScaleFactor;
+    }
 
 }

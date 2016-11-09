@@ -11,7 +11,7 @@ public class UserInterface extends JFrame {
 
     private ControlPanel controlPanel;
     private ImagePanel imagePanel;
-    private int frameWidth=800;
+    private int frameWidth=830;
     private int frameHeight=600;
 
     public UserInterface(){
@@ -37,8 +37,8 @@ public class UserInterface extends JFrame {
     }
 
     private void displayImagePanel(){
-        imagePanel = new ImagePanel(400,250);
-        imagePanel.setBounds(210, 5, 400, 250);
+        imagePanel = new ImagePanel(600,400);
+        imagePanel.setBounds(210, 5, 600, 400);
         imagePanel.setBackground(Color.red);
         this.add(imagePanel);
         imagePanel.setVisible(true);
@@ -55,5 +55,7 @@ public class UserInterface extends JFrame {
     private void getKeyPoints(){
         //todo
     }
+
+
 
 }
