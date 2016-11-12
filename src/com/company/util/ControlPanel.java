@@ -88,7 +88,7 @@ class ControlPanel extends JPanel {
                     imageTwoLabel.setVisible(true);
                     imageTwoName.setVisible(true);
                     imageTwoButton.setVisible(true);
-                    userInterface.displayFirstImage(imageOne,0);
+                    userInterface.displayFirstImage(imageOne);
                 }
             }
         });
@@ -107,6 +107,7 @@ class ControlPanel extends JPanel {
                     imageTwo = filePicker.getFilePath();
                     imageTwoName.setText(imageTwo.getName());
                     loadImageButton.setVisible(true);
+                    userInterface.displaySecondImage(imageTwo);
                 }
             }
         });
@@ -128,5 +129,14 @@ class ControlPanel extends JPanel {
         loadImageButton.setVisible(false);
     }
 
+    void getKeyPoints(File imageOne, File imageTwo){
+        String imageOneName = imageOne.getName();
+        String imageTwoName = imageTwo.getName();
+        String commands[] = new String[3];
+        commands[0] = "cd extract_features";
+        commands[1] = "./extract_features.ln -haraff -sift -i " + imageOneName + " -DE ";
+        commands[2] = "./extract_features.ln -haraff -sift -i " + imageTwoName + " -DE ";
+        //todo
+    }
 
 }
