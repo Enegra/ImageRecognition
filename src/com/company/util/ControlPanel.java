@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by agnie on 10/7/2016.
@@ -12,8 +13,8 @@ import java.io.File;
 class ControlPanel extends JPanel {
 
     private UserInterface userInterface;
-    private JLabel imageOneLabel, imageOneName, imageTwoLabel, imageTwoName, loadImageButtonLabel, analyzeButtonLabel;
-    private JButton imageOneButton, imageTwoButton, loadImageButton, analyzeButton;
+    private JLabel imageOneLabel, imageOneName, imageTwoLabel, imageTwoName, analyzeButtonLabel;
+    private JButton imageOneButton, imageTwoButton, analyzeImageButton;
     private File imageOne, imageTwo;
 
     ControlPanel(UserInterface userInterface){
@@ -29,7 +30,7 @@ class ControlPanel extends JPanel {
         setupImageTwoLabel();
         setupImageTwoName();
         setupImageTwoButton();
-        setupLoadImageButton();
+        setupAnalyzeImageButton();
         this.setAlignmentX(LEFT_ALIGNMENT);
         setBackground(Color.cyan);
         this.setVisible(true);
@@ -72,9 +73,6 @@ class ControlPanel extends JPanel {
 
     }
 
-    private void setupAnalyzeButtonLabel(){
-
-    }
 
     private void setupImageOneButton(){
         imageOneButton = new JButton("Browse");
@@ -106,7 +104,7 @@ class ControlPanel extends JPanel {
                     FilePicker filePicker = new FilePicker();
                     imageTwo = filePicker.getFilePath();
                     imageTwoName.setText(imageTwo.getName());
-                    loadImageButton.setVisible(true);
+                    analyzeImageButton.setVisible(true);
                     userInterface.displaySecondImage(imageTwo);
                 }
             }
@@ -116,27 +114,33 @@ class ControlPanel extends JPanel {
         imageTwoButton.setVisible(false);
     }
 
-    private void setupLoadImageButton(){
-        loadImageButton = new JButton("Load images");
-        loadImageButton.addActionListener(new ActionListener() {
+    private void setupAnalyzeImageButton(){
+        analyzeImageButton = new JButton("Analyze images");
+        analyzeImageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //todo
+                getKeyPoints(imageOne,imageTwo);
             }
         });
-        this.add(loadImageButton);
-        loadImageButton.setPreferredSize(new Dimension(150, 20));
-        loadImageButton.setVisible(false);
+        this.add(analyzeImageButton);
+        analyzeImageButton.setPreferredSize(new Dimension(150, 20));
+        analyzeImageButton.setVisible(false);
     }
 
     void getKeyPoints(File imageOne, File imageTwo){
         String imageOneName = imageOne.getName();
         String imageTwoName = imageTwo.getName();
-        String commands[] = new String[3];
-        commands[0] = "cd extract_features";
-        commands[1] = "./extract_features.ln -haraff -sift -i " + imageOneName + " -DE ";
-        commands[2] = "./extract_features.ln -haraff -sift -i " + imageTwoName + " -DE ";
-        //todo
+        String commands[] = new String[4];
+        commands[0] = "c:\\cygwin\\cygwin.bat";
+        commands[1] = "cd extract_features";
+        commands[2] = "./extract_features.exe -haraff -sift -i " + imageOneName + " -DE ";
+        commands[3] = "./extract_features.exe -haraff -sift -i " + imageTwoName + " -DE ";
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process process = runtime.exec(commands);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
