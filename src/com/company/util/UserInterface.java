@@ -11,8 +11,8 @@ public class UserInterface extends JFrame {
 
     private ControlPanel controlPanel;
     private ImagePanel imagePanel;
-    private int frameWidth=830;
-    private int frameHeight=600;
+    private int frameWidth=1230;
+    private int frameHeight=820;
 
     public UserInterface(){
         prepareGUI();
@@ -37,24 +37,27 @@ public class UserInterface extends JFrame {
     }
 
     private void displayImagePanel(){
-        imagePanel = new ImagePanel(600,400);
-        imagePanel.setBounds(210, 5, 600, 400);
+        imagePanel = new ImagePanel(1000,800);
+        imagePanel.setBounds(210, 5, 1000, 800);
         imagePanel.setBackground(Color.red);
         this.add(imagePanel);
         imagePanel.setVisible(true);
     }
 
-    void displayFirstImage(File imageFile, int number){
-        imagePanel.drawImage(imageFile, number);
+    void displayFirstImage(File imageFile){
+        imagePanel.drawImage(imageFile, 0);
+    }
+
+    void displaySecondImage(File imageFile) {
+        imagePanel.drawImage(imageFile, 1);
     }
 
     void analyzeImages(File imageOne, File imageTwo){
         //todo
     }
 
-    private void getKeyPoints(){
-        //todo
-    }
+
+
 
 
 
