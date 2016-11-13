@@ -130,14 +130,15 @@ class ControlPanel extends JPanel {
     void getKeyPoints(File imageOne, File imageTwo){
         String imageOneName = imageOne.getName();
         String imageTwoName = imageTwo.getName();
-        String commands[] = new String[4];
-        commands[0] = "c:\\cygwin\\cygwin.bat";
-        commands[1] = "cd extract_features";
-        commands[2] = "./extract_features.exe -haraff -sift -i " + imageOneName + " -DE ";
-        commands[3] = "./extract_features.exe -haraff -sift -i " + imageTwoName + " -DE ";
+        String commands[] = new String[2];
+        commands[0] = "c:/cygwin/bin/bash -l -c 'extract_features/extract_features.exe -haraff -sift -i extract_features/" + imageOneName + " -DE";
+        commands[1] = "c:/cygwin/bin/bash -l -c 'extract_features/extract_features.exe -haraff -sift -i extract_features/" + imageTwoName + " -DE";
+        System.out.println(imageOneName);
+        System.out.println(imageTwoName);
         Runtime runtime = Runtime.getRuntime();
         try {
-            Process process = runtime.exec(commands);
+            Process process = runtime.exec(commands[0]);
+            Process processTwo = runtime.exec(commands[1]);
         } catch (IOException e) {
             e.printStackTrace();
         }
