@@ -1,4 +1,4 @@
-package com.company.util;
+package com.company;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,9 +7,9 @@ import java.io.File;
 /**
  * Created by agnie on 10/7/2016.
  */
-public class FilePicker {
+class FilePicker {
 
-    public File getFilePath() {
+    File getFilePath() {
         JFrame frame = new JFrame();
         FileDialog fileDialog = new FileDialog(frame, "Import picture", FileDialog.LOAD);
         fileDialog.setVisible(true);

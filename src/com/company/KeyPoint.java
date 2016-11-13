@@ -3,7 +3,7 @@ package com.company;
 /**
  * Created by agnie on 10/12/2016.
  */
-public class KeyPoint {
+class KeyPoint {
 
     private double x;
     private double y;
@@ -27,11 +27,11 @@ public class KeyPoint {
         return traits[index];
     }
 
-    public double getX(){
+    double getX(){
         return x;
     }
 
-    public double getY(){
+    double getY(){
         return y;
     }
 

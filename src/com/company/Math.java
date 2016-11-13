@@ -1,13 +1,11 @@
-package com.company.util;
-
-import com.company.KeyPoint;
+package com.company;
 
 /**
  * Created by agnie on 10/15/2016.
  */
-public class Math {
+class Math {
 
-    public static double euclideanDistance(int[] p, int[] q){
+    static double euclideanDistance(int[] p, int[] q){
         if (p.length == q.length){
             double sum=0;
             for (int i=0; i<p.length; i++){
@@ -19,7 +17,7 @@ public class Math {
         return 0;
     }
 
-    public static double euclideanDistance(KeyPoint p, KeyPoint q){
+    static double euclideanDistance(KeyPoint p, KeyPoint q){
         double xDistance = p.getX() - q.getX();
         double yDistance = p.getY() - q.getY();
         return java.lang.Math.sqrt(xDistance*xDistance + yDistance*yDistance);

@@ -4,15 +4,16 @@ import Jama.Matrix;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.lang.Math;
 
 /**
  * Created by agnie on 10/17/2016.
  */
 class RANSAC {
 
-    ArrayList<ArrayList<KeyPoint>> pairedKeyPoints;
-    double smallRadius, bigRadius;
-    int errorThreshold, numberOfIterations;
+    private ArrayList<ArrayList<KeyPoint>> pairedKeyPoints;
+    private double smallRadius, bigRadius;
+    private int errorThreshold, numberOfIterations;
 
     RANSAC(ArrayList<ArrayList<KeyPoint>> pairedKeyPoints, double smallRadius, double bigRadius, int errorThreshold, int numberOfIterations) {
         this.pairedKeyPoints = pairedKeyPoints;

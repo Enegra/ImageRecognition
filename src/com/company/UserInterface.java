@@ -1,4 +1,4 @@
-package com.company.util;
+package com.company;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ public class UserInterface extends JFrame {
     private int frameWidth=1230;
     private int frameHeight=820;
 
-    public UserInterface(){
+    UserInterface(){
         prepareGUI();
     }
 
