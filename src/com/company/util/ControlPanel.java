@@ -135,13 +135,15 @@ class ControlPanel extends JPanel {
         commands[1] = "c:/cygwin/bin/bash -l -c 'extract_features/extract_features.exe -haraff -sift -i extract_features/" + imageTwoName + " -DE";
         System.out.println(imageOneName);
         System.out.println(imageTwoName);
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process process = runtime.exec(commands[0]);
-            Process processTwo = runtime.exec(commands[1]);
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (String command : commands){
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                Process process = runtime.exec(command);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
 }
