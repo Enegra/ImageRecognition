@@ -52,6 +52,10 @@ public class UserInterface extends JFrame {
         imagePanel.drawImage(imageFile, 1);
     }
 
+    int getProblemSize(){
+        return java.lang.Math.min(imagePanel.getImageOneSize(), imagePanel.getImageTwoSize());
+    }
+
     void analyzeImages(File imageOne, File imageTwo){
         //todo
     }

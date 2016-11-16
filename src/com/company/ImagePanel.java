@@ -81,4 +81,12 @@ public class ImagePanel extends JPanel {
         return imageTwoScaleFactor;
     }
 
+    int getImageOneSize(){
+        return imageOneLabel.getHeight();
+    }
+
+    int getImageTwoSize(){
+        return imageTwoLabel.getHeight();
+    }
+
 }

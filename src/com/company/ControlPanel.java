@@ -18,11 +18,11 @@ class ControlPanel extends JPanel {
     private JButton imageOneButton, imageTwoButton, analyzeImageButton, showKeyPointsButton, showPairedKeyPointsButton, showNeighboursButton, showRansacButton;
     private File imageOne, imageTwo;
     private ArrayList<KeyPoint> firstImageKeyPoints, secondImageKeyPoints;
-    private ImageAnalyser imageAnalyser;
+    private ArrayList<ArrayList<KeyPoint>> pairedKeyPoints, coherentPairs, ransacPairs;
+
 
     ControlPanel(UserInterface userInterface) {
         this.userInterface = userInterface;
-        imageAnalyser = new ImageAnalyser();
         setupPanel();
     }
 
@@ -35,6 +35,10 @@ class ControlPanel extends JPanel {
         setupImageTwoName();
         setupImageTwoButton();
         setupAnalyzeImageButton();
+        setupShowKeyPointsButton();
+        setupShowPairedKeyPointsButton();
+        setupShowNeighboursButton();
+        setupShowRansacButton();
         this.setAlignmentX(LEFT_ALIGNMENT);
         setBackground(Color.cyan);
         this.setVisible(true);
@@ -120,6 +124,7 @@ class ControlPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 generateKeyPoints();
                 fetchKeyPoints();
+                findCommonPoints();
             }
         });
         this.add(analyzeImageButton);
@@ -129,8 +134,55 @@ class ControlPanel extends JPanel {
 
     private void setupShowKeyPointsButton(){
         showKeyPointsButton = new JButton("Show Keypoints");
+        showKeyPointsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //todo
+            }
+        });
+        this.add(showKeyPointsButton);
+        showKeyPointsButton.setPreferredSize(new Dimension(150,20));
+        showKeyPointsButton.setVisible(false);
     }
 
+    private void setupShowPairedKeyPointsButton(){
+        showPairedKeyPointsButton = new JButton("Show Pairs");
+        showPairedKeyPointsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //todo
+            }
+        });
+        this.add(showPairedKeyPointsButton);
+        showPairedKeyPointsButton.setPreferredSize(new Dimension(150,20));
+        showPairedKeyPointsButton.setVisible(false);
+    }
+
+    private void setupShowNeighboursButton(){
+        showNeighboursButton = new JButton("Show Coherent Pairs");
+        showNeighboursButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //todo
+            }
+        });
+        this.add(showNeighboursButton);
+        showNeighboursButton.setPreferredSize(new Dimension(150,20));
+        showNeighboursButton.setVisible(false);
+    }
+
+    private void setupShowRansacButton(){
+        showRansacButton = new JButton("Show Ransac Pairs");
+        showRansacButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //todo
+            }
+        });
+        this.add(showRansacButton);
+        showRansacButton.setPreferredSize(new Dimension(150,20));
+        showRansacButton.setVisible(false);
+    }
 
 
     void generateKeyPoints() {
@@ -155,8 +207,24 @@ class ControlPanel extends JPanel {
     void fetchKeyPoints() {
         File firstKeyPointsFile = new File(imageOne.getAbsolutePath() + ".haraff.sift");
         File secondKeyPointsFile = new File(imageTwo.getAbsolutePath() + ".haraff.sift");
+        ImageAnalyser imageAnalyser = new ImageAnalyser();
         firstImageKeyPoints = imageAnalyser.getKeyPoints(firstKeyPointsFile);
         secondImageKeyPoints = imageAnalyser.getKeyPoints(secondKeyPointsFile);
+        pairedKeyPoints = imageAnalyser.pairKeypoints(firstImageKeyPoints,secondImageKeyPoints);
     }
+
+    void findCommonPoints(){
+        NeighbourhoodAnalyser neighbourhoodAnalyser = new NeighbourhoodAnalyser(pairedKeyPoints);
+        int neighbourhoodSize = (int)pairedKeyPoints.size()/50;
+        coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, 0.6);
+        System.out.println("Coherence: " + coherentPairs.size()/pairedKeyPoints.size());
+        double smallRadius = 0.01 * userInterface.getProblemSize();
+        double largeRadius = 0.3 * userInterface.getProblemSize();
+        int errorThreshold = 50;
+        RANSAC ransac = new RANSAC(pairedKeyPoints, smallRadius, largeRadius, errorThreshold, 100);
+        ransacPairs = ransac.getMatchingPairs(0);
+        System.out.println("Ransac done");
+    }
+
 
 }
