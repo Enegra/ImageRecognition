@@ -22,14 +22,28 @@ public class NeighbourhoodAnalyser {
             double distance = Math.euclideanDistance(pairedKeyPoints.get(i).get(side), chosenPoint);
             distances.add(distance);
         }
-        quickSort(distances);
-        for (int i = 0; i < neighbourhoodSize; i++) {
-            neighbours.add(pairedKeyPoints.get(i));
+        ArrayList<ArrayList<KeyPoint>> pairs = copyPairedKeyPoints(pairedKeyPoints);
+        quickSort(distances, pairs);
+        for (int i = 1; i < neighbourhoodSize+1; i++) {
+            neighbours.add(pairs.get(i));
         }
         return neighbours;
     }
 
-    private void quickSort(ArrayList<Double> unsortedArray) {
+    private ArrayList<ArrayList<KeyPoint>> copyPairedKeyPoints(ArrayList<ArrayList<KeyPoint>> pairedKeyPoints){
+        ArrayList<ArrayList<KeyPoint>> copy = new ArrayList<>();
+        for (int i=0; i<pairedKeyPoints.size(); i++){
+            ArrayList<KeyPoint> pairCopy = new ArrayList<>();
+            KeyPoint one = new KeyPoint(pairedKeyPoints.get(i).get(0));
+            KeyPoint two = new KeyPoint(pairedKeyPoints.get(i).get(1));
+            pairCopy.add(one);
+            pairCopy.add(two);
+            copy.add(pairCopy);
+        }
+        return copy;
+    }
+
+    private void quickSort(ArrayList<Double> unsortedArray, ArrayList<ArrayList<KeyPoint>> pairedKeyPoints) {
         quickSort(unsortedArray, pairedKeyPoints, 0, unsortedArray.size() - 1);
     }
 
@@ -52,7 +66,7 @@ public class NeighbourhoodAnalyser {
                 unsortedArray.set(i, unsortedArray.get(j));
                 keyPoints.set(i, keyPoints.get(j));
                 unsortedArray.set(j, temp);
-                keyPoints.set(i, tempPair);
+                keyPoints.set(j, tempPair);
                 i++;
                 j--;
             }
@@ -68,9 +82,16 @@ public class NeighbourhoodAnalyser {
     boolean isCoherent(ArrayList<KeyPoint> pair, int neighbourhoodSize, double threshold) {
         ArrayList<ArrayList<KeyPoint>> firstPointNeighbours = searchNeighbours(pair, neighbourhoodSize, 0);
         ArrayList<ArrayList<KeyPoint>> secondPointNeighbours = searchNeighbours(pair, neighbourhoodSize, 1);
-        firstPointNeighbours.retainAll(secondPointNeighbours);
-        double coherence = firstPointNeighbours.size() / neighbourhoodSize;
-        return coherence >= threshold;
+        ArrayList<ArrayList<KeyPoint>> coherentPairs = new ArrayList<>();
+        for (int i = 0; i<firstPointNeighbours.size(); i++){
+            for (int j=0; j<secondPointNeighbours.size(); j++){
+                if (firstPointNeighbours.get(i).get(0).getX() == secondPointNeighbours.get(j).get(0).getX()){
+                    coherentPairs.add(firstPointNeighbours.get(i));
+                }
+            }
+        }
+        double coherence = coherentPairs.size()/neighbourhoodSize;
+        return coherence > threshold;
     }
 
     ArrayList<ArrayList<KeyPoint>> coherentPairs(int neighbourhoodSize, double threshold) {

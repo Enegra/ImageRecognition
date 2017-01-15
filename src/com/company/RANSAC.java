@@ -39,7 +39,6 @@ class RANSAC {
         Matrix bestTransformModel = null;
         int highScore = 0;
         for (int i = 0; i < numberOfIterations; i++) {
-            System.out.println("TESTING TRANSFORM");
             Matrix transformModel = getTransform(transformType);
             int score = 0;
             for (ArrayList<KeyPoint> pair : pairedKeyPoints) {

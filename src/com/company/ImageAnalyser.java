@@ -110,14 +110,16 @@ public class ImageAnalyser {
 
     void findCommonPoints(int problemSize) {
         NeighbourhoodAnalyser neighbourhoodAnalyser = new NeighbourhoodAnalyser(pairedKeyPoints);
-        int neighbourhoodSize = pairedKeyPoints.size() / 50;
-        coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, 0.8);
+        System.out.println(pairedKeyPoints.size());
+        int neighbourhoodSize = (int)(pairedKeyPoints.size() * 0.03);
+        System.out.println(neighbourhoodSize);
+        coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, 0.5);
         coherence = coherentPairs.size() / pairedKeyPoints.size();
         double smallRadius = 0.05 * problemSize;
         double largeRadius = 0.3 * problemSize;
         int errorThreshold = 50;
         RANSAC ransac = new RANSAC(pairedKeyPoints, smallRadius, largeRadius, errorThreshold, 100);
-        ransacPairs = ransac.getMatchingPairs(0);
+        ransacPairs = ransac.getMatchingPairs(1);
         System.out.println("Ransac done");
     }
 
