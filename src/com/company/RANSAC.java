@@ -2,9 +2,9 @@ package com.company;
 
 import Jama.Matrix;
 
+import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Random;
-import java.lang.Math;
 
 /**
  * Created by agnie on 10/17/2016.
@@ -23,12 +23,12 @@ class RANSAC {
         this.numberOfIterations = numberOfIterations;
     }
 
-    ArrayList<ArrayList<KeyPoint>> getMatchingPairs(int transformType){
-        ArrayList<ArrayList<KeyPoint>> matchingPairs = new ArrayList<ArrayList<KeyPoint>>();
+    ArrayList<ArrayList<KeyPoint>> getMatchingPairs(int transformType) {
+        ArrayList<ArrayList<KeyPoint>> matchingPairs = new ArrayList<>();
         Matrix transformModel = getTransformModel(transformType);
-        for (ArrayList<KeyPoint> pair : pairedKeyPoints){
+        for (ArrayList<KeyPoint> pair : pairedKeyPoints) {
             double error = getErrorValue(pair, transformModel);
-            if (error < errorThreshold){
+            if (error < errorThreshold) {
                 matchingPairs.add(pair);
             }
         }
@@ -44,11 +44,11 @@ class RANSAC {
             int score = 0;
             for (ArrayList<KeyPoint> pair : pairedKeyPoints) {
                 double errorValue = getErrorValue(pair, transformModel);
-                if (errorValue < errorThreshold){
+                if (errorValue < errorThreshold) {
                     score++;
                 }
             }
-            if (score > highScore){
+            if (score > highScore) {
                 bestTransformModel = transformModel;
                 highScore = score;
             }
@@ -71,11 +71,11 @@ class RANSAC {
         } else {
             //problem here
             ArrayList<KeyPoint> pair = pairedKeyPoints.get(random.nextInt(pairedKeyPoints.size()));
-            while (startingPoints.contains(pair) || !isNear(pair, startingPoints)&&attempts>0) {
+            while (startingPoints.contains(pair) || !isNear(pair, startingPoints) && attempts > 0) {
                 pair = pairedKeyPoints.get(random.nextInt(pairedKeyPoints.size()));
                 attempts--;
             }
-            if (attempts==0 && startingPoints.size() < 2){
+            if (attempts == 0 && startingPoints.size() < 2) {
                 startingPoints.clear();
                 getStartingPoints(startingPoints);
             }
@@ -111,7 +111,7 @@ class RANSAC {
 
     private Matrix getAffineTransform() {
         ArrayList<Matrix> affineMatrices = getAffineData();
-        while (affineMatrices.get(0).det()==0){
+        while (affineMatrices.get(0).det() == 0) {
             affineMatrices = getAffineData();
         }
         Matrix firstMatrix = affineMatrices.get(0).inverse();
@@ -127,7 +127,7 @@ class RANSAC {
 
     private Matrix getPerspectiveTransform() {
         ArrayList<Matrix> perspectiveMatrices = getPerspectiveData();
-        while (perspectiveMatrices.get(0).det()==0){
+        while (perspectiveMatrices.get(0).det() == 0) {
             perspectiveMatrices = getPerspectiveData();
         }
         Matrix firstMatrix = perspectiveMatrices.get(0).inverse();
@@ -141,8 +141,8 @@ class RANSAC {
         return transformMatrix;
     }
 
-    private ArrayList<Matrix> getAffineData(){
-        ArrayList<ArrayList<KeyPoint>> startingPoints = new ArrayList<ArrayList<KeyPoint>>();
+    private ArrayList<Matrix> getAffineData() {
+        ArrayList<ArrayList<KeyPoint>> startingPoints = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             startingPoints = getStartingPoints(startingPoints);
         }
@@ -171,8 +171,8 @@ class RANSAC {
         return matrices;
     }
 
-    private ArrayList<Matrix> getPerspectiveData(){
-        ArrayList<ArrayList<KeyPoint>> startingPoints = new ArrayList<ArrayList<KeyPoint>>();
+    private ArrayList<Matrix> getPerspectiveData() {
+        ArrayList<ArrayList<KeyPoint>> startingPoints = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             startingPoints = getStartingPoints(startingPoints);
         }

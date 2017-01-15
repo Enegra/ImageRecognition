@@ -14,7 +14,7 @@ public class ImageAnalyser {
 
     private ArrayList<KeyPoint> getKeyPoints(File file) {
         BufferedReader reader = null;
-        ArrayList<KeyPoint> keyPoints = new ArrayList<KeyPoint>();
+        ArrayList<KeyPoint> keyPoints = new ArrayList<>();
         try {
             reader = new BufferedReader(new FileReader(file));
             String line = reader.readLine();
@@ -48,7 +48,7 @@ public class ImageAnalyser {
     }
 
     private ArrayList<ArrayList<KeyPoint>> pairKeypoints(ArrayList<KeyPoint> firstImageKeyPoints, ArrayList<KeyPoint> secondImageKeypoints) {
-        ArrayList<ArrayList<KeyPoint>> pairedKeypoints = new ArrayList<ArrayList<KeyPoint>>();
+        ArrayList<ArrayList<KeyPoint>> pairedKeypoints = new ArrayList<>();
         for (int i = 0; i < firstImageKeyPoints.size(); i++) {
             double minimum = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(0).getTraits());
             KeyPoint match = secondImageKeypoints.get(0);
@@ -64,7 +64,7 @@ public class ImageAnalyser {
                 }
             }
             if (!obscure) {
-                ArrayList<KeyPoint> pair = new ArrayList<KeyPoint>();
+                ArrayList<KeyPoint> pair = new ArrayList<>();
                 pair.add(firstImageKeyPoints.get(i));
                 pair.add(match);
                 pairedKeypoints.add(pair);
@@ -110,7 +110,7 @@ public class ImageAnalyser {
 
     void findCommonPoints(int problemSize) {
         NeighbourhoodAnalyser neighbourhoodAnalyser = new NeighbourhoodAnalyser(pairedKeyPoints);
-        int neighbourhoodSize = (int) pairedKeyPoints.size() / 50;
+        int neighbourhoodSize = pairedKeyPoints.size() / 50;
         coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, 0.8);
         coherence = coherentPairs.size() / pairedKeyPoints.size();
         double smallRadius = 0.05 * problemSize;

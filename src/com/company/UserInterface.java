@@ -11,16 +11,16 @@ public class UserInterface extends JFrame {
 
     private ControlPanel controlPanel;
     private ImagePanel imagePanel;
-    private int frameWidth=1230;
-    private int frameHeight=820;
+    private int frameWidth = 1230;
+    private int frameHeight = 820;
 
-    UserInterface(){
+    UserInterface() {
         prepareGUI();
     }
 
-    private void prepareGUI(){
+    private void prepareGUI() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(frameWidth,frameHeight);
+        this.setSize(frameWidth, frameHeight);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         this.setTitle("Image recognition");
@@ -30,21 +30,21 @@ public class UserInterface extends JFrame {
     }
 
 
-    private void displayControlPanel(){
+    private void displayControlPanel() {
         controlPanel = new ControlPanel(this);
-        controlPanel.setBounds(5,5, 200, 800);
+        controlPanel.setBounds(5, 5, 200, 800);
         this.add(controlPanel);
     }
 
-    private void displayImagePanel(){
-        imagePanel = new ImagePanel(1000,800);
+    private void displayImagePanel() {
+        imagePanel = new ImagePanel(1000, 800);
         imagePanel.setBounds(210, 5, 1000, 800);
         imagePanel.setBackground(new Color(184, 217, 224));
         this.add(imagePanel);
         imagePanel.setVisible(true);
     }
 
-    void displayFirstImage(File imageFile){
+    void displayFirstImage(File imageFile) {
         imagePanel.drawImage(imageFile, 0);
     }
 
@@ -52,21 +52,12 @@ public class UserInterface extends JFrame {
         imagePanel.drawImage(imageFile, 1);
     }
 
-    int getProblemSize(){
+    int getProblemSize() {
         return java.lang.Math.min(imagePanel.getImageOneSize(), imagePanel.getImageTwoSize());
     }
 
-    ImagePanel getImagePanel(){
+    ImagePanel getImagePanel() {
         return imagePanel;
     }
-
-    void analyzeImages(File imageOne, File imageTwo){
-        //todo
-    }
-
-
-
-
-
 
 }

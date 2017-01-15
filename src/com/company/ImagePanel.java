@@ -28,40 +28,37 @@ public class ImagePanel extends JPanel {
     private ArrayList<KeyPoint> firstImageKeyPoints;
     private ArrayList<KeyPoint> secondImageKeyPoints;
 
-    ImagePanel(int panelWidth, int panelHeight){
+    ImagePanel(int panelWidth, int panelHeight) {
         this.panelWidth = panelWidth;
         this.panelHeight = panelHeight;
         setupPanel();
         //todo
     }
 
-    private void setupPanel(){
-        this.setSize(panelWidth,panelHeight);
+    private void setupPanel() {
+        this.setSize(panelWidth, panelHeight);
         this.setLayout(null);
     }
 
-    void drawImage(File file, int number){
-        if (file==null){
-            if (number==0){
+    void drawImage(File file, int number) {
+        if (file == null) {
+            if (number == 0) {
                 imageOne = null;
-            }
-            else {
+            } else {
                 imageTwo = null;
             }
-        }
-        else {
+        } else {
             try {
                 BufferedImage bufferedImage = ImageIO.read(file);
                 scale = 1;
-                if (bufferedImage.getHeight() > 400 || bufferedImage.getWidth() > 1000){
+                if (bufferedImage.getHeight() > 400 || bufferedImage.getWidth() > 1000) {
                     bufferedImage = resizeImage(bufferedImage);
                 }
-                if (number==0){
+                if (number == 0) {
                     imageOne = bufferedImage;
                     imageOneScaleFactor = scale;
                     repaint();
-                }
-                else {
+                } else {
                     imageTwo = bufferedImage;
                     imageTwoScaleFactor = scale;
                     repaint();
@@ -73,85 +70,85 @@ public class ImagePanel extends JPanel {
         }
     }
 
-    private void paintImages(Graphics2D graphics2D){
-        if (imageOne!=null){
-            graphics2D.drawImage(imageOne, 0,0,null);
-            if (imageTwo!=null){
-                graphics2D.drawImage(imageTwo, 0, imageOne.getHeight()+30, null);
+    private void paintImages(Graphics2D graphics2D) {
+        if (imageOne != null) {
+            graphics2D.drawImage(imageOne, 0, 0, null);
+            if (imageTwo != null) {
+                graphics2D.drawImage(imageTwo, 0, imageOne.getHeight() + 30, null);
             }
         }
     }
 
-    private BufferedImage resizeImage(BufferedImage originalImage){
-        int widthScale = originalImage.getWidth()/1000 +1;
-        int heightScale = originalImage.getHeight()/400+1;
-        scale = java.lang.Math.max(widthScale,heightScale);
+    private BufferedImage resizeImage(BufferedImage originalImage) {
+        int widthScale = originalImage.getWidth() / 1000 + 1;
+        int heightScale = originalImage.getHeight() / 400 + 1;
+        scale = java.lang.Math.max(widthScale, heightScale);
         int scaledWidth = originalImage.getWidth() / scale;
         int scaledHeight = originalImage.getHeight() / scale;
-        BufferedImage resizedImage = new BufferedImage(scaledWidth,scaledHeight, originalImage.getType());
+        BufferedImage resizedImage = new BufferedImage(scaledWidth, scaledHeight, originalImage.getType());
         Graphics2D graphics = resizedImage.createGraphics();
         graphics.drawImage(originalImage, 0, 0, scaledWidth, scaledHeight, null);
         graphics.dispose();
         return resizedImage;
     }
 
-    int getImageOneScaleFactor(){
+    int getImageOneScaleFactor() {
         return imageOneScaleFactor;
     }
 
-    int getImageTwoScaleFactor(){
+    int getImageTwoScaleFactor() {
         return imageTwoScaleFactor;
     }
 
-    int getImageOneSize(){
+    int getImageOneSize() {
         return imageOne.getHeight();
     }
 
-    int getImageTwoSize(){
+    int getImageTwoSize() {
         return imageTwo.getHeight();
     }
 
-    void displayPairedKeyPoints(Graphics2D graphics2D){
+    void displayPairedKeyPoints(Graphics2D graphics2D) {
         drawKeyPointPairs(pairedKeyPoints, new Color(237, 156, 26), graphics2D);
     }
 
-    void displayCoherentPairs(Graphics2D graphics2D){
+    void displayCoherentPairs(Graphics2D graphics2D) {
         drawKeyPointPairs(coherentKeyPoints, new Color(237, 26, 156), graphics2D);
     }
 
-    void displayRansacPairs(Graphics2D graphics2D){
+    void displayRansacPairs(Graphics2D graphics2D) {
         drawKeyPointPairs(ransacKeyPoints, new Color(26, 201, 237), graphics2D);
     }
 
-    private void drawKeyPointPairs(ArrayList<ArrayList<KeyPoint>> pairs, Color color, Graphics2D graphics2D){
-        if (pairs!=null && pairs.size() > 0){
+    private void drawKeyPointPairs(ArrayList<ArrayList<KeyPoint>> pairs, Color color, Graphics2D graphics2D) {
+        if (pairs != null && pairs.size() > 0) {
             graphics2D.setColor(color);
-            for (ArrayList<KeyPoint> keyPoints : pairs){
-                int oneX = (int)keyPoints.get(0).getX()/imageOneScaleFactor;
-                int oneY = (int)keyPoints.get(0).getY()/imageOneScaleFactor;
-                int twoX = (int)keyPoints.get(1).getX()/imageTwoScaleFactor;
-                int twoY = (int)keyPoints.get(1).getY()/imageTwoScaleFactor + imageOne.getHeight() + 30;
+            for (ArrayList<KeyPoint> keyPoints : pairs) {
+                int oneX = (int) keyPoints.get(0).getX() / imageOneScaleFactor;
+                int oneY = (int) keyPoints.get(0).getY() / imageOneScaleFactor;
+                int twoX = (int) keyPoints.get(1).getX() / imageTwoScaleFactor;
+                int twoY = (int) keyPoints.get(1).getY() / imageTwoScaleFactor + imageOne.getHeight() + 30;
                 graphics2D.drawLine(oneX, oneY, twoX, twoY);
             }
         }
     }
 
 
-    private void drawKeyPoints(Graphics2D graphics2D){
-        if (firstImageKeyPoints!=null){
+    private void drawKeyPoints(Graphics2D graphics2D) {
+        if (firstImageKeyPoints != null) {
             graphics2D.setColor(new Color(17, 214, 148));
-            for (KeyPoint keyPoint : firstImageKeyPoints){
-                int x = (int)keyPoint.getX()/imageOneScaleFactor;
-                int y = (int)keyPoint.getY()/imageOneScaleFactor;
-                graphics2D.drawLine(x,y,x,y);
+            for (KeyPoint keyPoint : firstImageKeyPoints) {
+                int x = (int) keyPoint.getX() / imageOneScaleFactor;
+                int y = (int) keyPoint.getY() / imageOneScaleFactor;
+                graphics2D.drawLine(x, y, x, y);
             }
         }
-        if (secondImageKeyPoints!=null){
+        if (secondImageKeyPoints != null) {
 //            graphics2D.setColor(new Color(95, 17, 214));
-            for (KeyPoint keyPoint : secondImageKeyPoints){
-                int x = (int)keyPoint.getX()/imageTwoScaleFactor;
-                int y = (int)keyPoint.getY()/imageTwoScaleFactor+imageOne.getHeight()+30;
-                graphics2D.drawLine(x,y,x,y);
+            for (KeyPoint keyPoint : secondImageKeyPoints) {
+                int x = (int) keyPoint.getX() / imageTwoScaleFactor;
+                int y = (int) keyPoint.getY() / imageTwoScaleFactor + imageOne.getHeight() + 30;
+                graphics2D.drawLine(x, y, x, y);
             }
         }
     }
@@ -186,14 +183,14 @@ public class ImagePanel extends JPanel {
         repaint();
     }
 
-    void setFirstImageKeyPoints(ArrayList<KeyPoint> firstImageKeyPoints){
-        this.firstImageKeyPoints=firstImageKeyPoints;
+    void setFirstImageKeyPoints(ArrayList<KeyPoint> firstImageKeyPoints) {
+        this.firstImageKeyPoints = firstImageKeyPoints;
         revalidate();
         repaint();
     }
 
-    void setSecondImageKeyPoints(ArrayList<KeyPoint> secondImageKeyPoints){
-        this.secondImageKeyPoints=secondImageKeyPoints;
+    void setSecondImageKeyPoints(ArrayList<KeyPoint> secondImageKeyPoints) {
+        this.secondImageKeyPoints = secondImageKeyPoints;
         revalidate();
         repaint();
     }

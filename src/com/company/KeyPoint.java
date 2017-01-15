@@ -9,35 +9,35 @@ class KeyPoint {
     private double y;
     private int[] traits;
 
-    KeyPoint(double x, double y){
+    KeyPoint(double x, double y) {
         this.x = x;
         this.y = y;
         traits = new int[128];
     }
 
-    KeyPoint(KeyPoint otherPoint){
+    KeyPoint(KeyPoint otherPoint) {
         this.x = otherPoint.x;
         this.y = otherPoint.y;
         this.traits = otherPoint.traits;
     }
 
-    int[] getTraits(){
+    int[] getTraits() {
         return traits;
     }
 
-    void setTrait(int index, int trait){
+    void setTrait(int index, int trait) {
         traits[index] = trait;
     }
 
-    int getTrait(int index){
+    int getTrait(int index) {
         return traits[index];
     }
 
-    double getX(){
+    double getX() {
         return x;
     }
 
-    double getY(){
+    double getY() {
         return y;
     }
 

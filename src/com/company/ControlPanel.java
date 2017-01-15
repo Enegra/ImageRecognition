@@ -88,28 +88,29 @@ class ControlPanel extends JPanel {
         transformChoiceLabel.setVisible(false);
     }
 
-    private void setupNeighbourhoodSliderLabel(){
+    private void setupNeighbourhoodSliderLabel() {
         neighbourhoodSliderLabel = new JLabel("Choose the size of neighbourhood");
         this.add(neighbourhoodSliderLabel);
         neighbourhoodSliderLabel.setPreferredSize(new Dimension(200, 20));
         neighbourhoodSliderLabel.setVisible(false);
     }
 
-    private void setupCoherenceThresholdLabel(){
+    private void setupCoherenceThresholdLabel() {
         coherenceThresholdLabel = new JLabel("Select the coherence threshold");
         this.add(coherenceThresholdLabel);
         coherenceThresholdLabel.setPreferredSize(new Dimension(200, 20));
         coherenceThresholdLabel.setVisible(false);
     }
 
-    private void setupIterationsLabel(){
+    private void setupIterationsLabel() {
         iterationsLabel = new JLabel("Set number of iterations");
         this.add(iterationsLabel);
-        iterationsLabel.setPreferredSize(new Dimension(200, 20));;
+        iterationsLabel.setPreferredSize(new Dimension(200, 20));
+        ;
         iterationsLabel.setVisible(false);
     }
 
-    private void setupErrorThresholdLabel(){
+    private void setupErrorThresholdLabel() {
         errorThresholdLabel = new JLabel("Set error threshold");
         this.add(errorThresholdLabel);
         errorThresholdLabel.setPreferredSize(new Dimension(200, 20));
@@ -266,22 +267,22 @@ class ControlPanel extends JPanel {
     }
 
     private void setupNeighbourhoodSizeSlider() {
-            neighbourhoodSizeSlider = new JSlider(JSlider.HORIZONTAL, 2,8,5);
-             neighbourhoodSizeSlider.setMajorTickSpacing(2);
-            neighbourhoodSizeSlider.setMinorTickSpacing(1);
-            neighbourhoodSizeSlider.createStandardLabels(3, 2);
-            neighbourhoodSizeSlider.setSnapToTicks(true);
-            neighbourhoodSizeSlider.setPaintTicks(true);
-            neighbourhoodSizeSlider.setPaintLabels(true);
-            this.add(neighbourhoodSizeSlider);
-            neighbourhoodSizeSlider.setVisible(false);
+        neighbourhoodSizeSlider = new JSlider(JSlider.HORIZONTAL, 2, 8, 5);
+        neighbourhoodSizeSlider.setMajorTickSpacing(2);
+        neighbourhoodSizeSlider.setMinorTickSpacing(1);
+        neighbourhoodSizeSlider.createStandardLabels(3, 2);
+        neighbourhoodSizeSlider.setSnapToTicks(true);
+        neighbourhoodSizeSlider.setPaintTicks(true);
+        neighbourhoodSizeSlider.setPaintLabels(true);
+        this.add(neighbourhoodSizeSlider);
+        neighbourhoodSizeSlider.setVisible(false);
     }
 
     private void setupCoherenceThresholdSlider() {
-        coherenceThresholdSlider = new JSlider(JSlider.HORIZONTAL, 5,9,6);
+        coherenceThresholdSlider = new JSlider(JSlider.HORIZONTAL, 5, 9, 6);
         coherenceThresholdSlider.setMajorTickSpacing(2);
         coherenceThresholdSlider.setMinorTickSpacing(1);
-        coherenceThresholdSlider.createStandardLabels(2,5);
+        coherenceThresholdSlider.createStandardLabels(2, 5);
         coherenceThresholdSlider.setSnapToTicks(true);
         coherenceThresholdSlider.setPaintTicks(true);
         coherenceThresholdSlider.setPaintLabels(true);
@@ -289,11 +290,11 @@ class ControlPanel extends JPanel {
         coherenceThresholdSlider.setVisible(false);
     }
 
-    private void setupErrorThresholdSlider(){
-        ransacErrorThresholdSlider = new JSlider(JSlider.HORIZONTAL, 5,9,6);
+    private void setupErrorThresholdSlider() {
+        ransacErrorThresholdSlider = new JSlider(JSlider.HORIZONTAL, 5, 9, 6);
         ransacErrorThresholdSlider.setMajorTickSpacing(2);
         ransacErrorThresholdSlider.setMinorTickSpacing(1);
-        ransacErrorThresholdSlider.createStandardLabels(2,5);
+        ransacErrorThresholdSlider.createStandardLabels(2, 5);
         ransacErrorThresholdSlider.setSnapToTicks(true);
         ransacErrorThresholdSlider.setPaintTicks(true);
         ransacErrorThresholdSlider.setPaintLabels(true);
