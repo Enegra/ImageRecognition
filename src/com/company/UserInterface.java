@@ -32,14 +32,14 @@ public class UserInterface extends JFrame {
 
     private void displayControlPanel(){
         controlPanel = new ControlPanel(this);
-        controlPanel.setBounds(5,5, 200, 400);
+        controlPanel.setBounds(5,5, 200, 800);
         this.add(controlPanel);
     }
 
     private void displayImagePanel(){
         imagePanel = new ImagePanel(1000,800);
         imagePanel.setBounds(210, 5, 1000, 800);
-        imagePanel.setBackground(Color.red);
+        imagePanel.setBackground(new Color(184, 217, 224));
         this.add(imagePanel);
         imagePanel.setVisible(true);
     }
@@ -54,6 +54,10 @@ public class UserInterface extends JFrame {
 
     int getProblemSize(){
         return java.lang.Math.min(imagePanel.getImageOneSize(), imagePanel.getImageTwoSize());
+    }
+
+    ImagePanel getImagePanel(){
+        return imagePanel;
     }
 
     void analyzeImages(File imageOne, File imageTwo){

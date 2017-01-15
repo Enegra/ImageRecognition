@@ -8,7 +8,11 @@ import java.util.ArrayList;
  */
 public class ImageAnalyser {
 
-    ArrayList<KeyPoint> getKeyPoints(File file){
+    private ArrayList<KeyPoint> firstImageKeyPoints, secondImageKeyPoints;
+    private ArrayList<ArrayList<KeyPoint>> pairedKeyPoints, coherentPairs, ransacPairs;
+    private int coherence;
+
+    private ArrayList<KeyPoint> getKeyPoints(File file){
         BufferedReader reader = null;
         ArrayList<KeyPoint> keyPoints = new ArrayList<KeyPoint>();
         try {
@@ -43,7 +47,7 @@ public class ImageAnalyser {
         return keyPoints;
     }
 
-    ArrayList<ArrayList<KeyPoint>> pairKeypoints(ArrayList<KeyPoint> firstImageKeyPoints, ArrayList<KeyPoint> secondImageKeypoints){
+    private ArrayList<ArrayList<KeyPoint>> pairKeypoints(ArrayList<KeyPoint> firstImageKeyPoints, ArrayList<KeyPoint> secondImageKeypoints){
         ArrayList<ArrayList<KeyPoint>> pairedKeypoints = new ArrayList<ArrayList<KeyPoint>>();
         for (int i=0; i<firstImageKeyPoints.size(); i++){
             double minimum = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(0).getTraits());
@@ -68,6 +72,70 @@ public class ImageAnalyser {
             }
         }
         return pairedKeypoints;
+    }
+
+    void generateKeyPoints(File imageOne, File imageTwo) {
+        String imageOneName = imageOne.getName();
+        String imageTwoName = imageTwo.getName();
+        String commands[] = new String[2];
+        commands[0] = "c:/cygwin/bin/bash -l -c 'extract_features/extract_features.exe -haraff -sift -i extract_features/" + imageOneName + " -DE";
+        commands[1] = "c:/cygwin/bin/bash -l -c 'extract_features/extract_features.exe -haraff -sift -i extract_features/" + imageTwoName + " -DE";
+        System.out.println(imageOneName);
+        System.out.println(imageTwoName);
+        for (String command : commands) {
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                Process process = runtime.exec(command);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    void fetchKeyPoints(File imageOne, File imageTwo) {
+        File firstKeyPointsFile = new File(imageOne.getAbsolutePath() + ".haraff.sift");
+        File secondKeyPointsFile = new File(imageTwo.getAbsolutePath() + ".haraff.sift");
+        firstImageKeyPoints = getKeyPoints(firstKeyPointsFile);
+        secondImageKeyPoints = getKeyPoints(secondKeyPointsFile);
+        pairedKeyPoints = pairKeypoints(firstImageKeyPoints,secondImageKeyPoints);
+    }
+
+    void findCommonPoints(int problemSize){
+        NeighbourhoodAnalyser neighbourhoodAnalyser = new NeighbourhoodAnalyser(pairedKeyPoints);
+        int neighbourhoodSize = (int)pairedKeyPoints.size()/50;
+        coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, 0.6);
+        coherence =  coherentPairs.size()/pairedKeyPoints.size();
+        double smallRadius = 0.05 * problemSize;
+        double largeRadius = 0.3 * problemSize;
+        int errorThreshold = 50;
+        RANSAC ransac = new RANSAC(pairedKeyPoints, smallRadius, largeRadius, errorThreshold, 100);
+        ransacPairs = ransac.getMatchingPairs(0);
+        System.out.println("Ransac done");
+    }
+
+    int getCoherence(){
+        return coherence;
+    }
+
+    ArrayList<KeyPoint> getFirstImageKeyPoints(){
+        return firstImageKeyPoints;
+    }
+
+    ArrayList<KeyPoint> getSecondImageKeyPoints(){
+        return secondImageKeyPoints;
+    }
+
+    ArrayList<ArrayList<KeyPoint>> getPairedKeyPoints(){
+        return pairedKeyPoints;
+    }
+
+    ArrayList<ArrayList<KeyPoint>> getCoherentPairs(){
+        return coherentPairs;
+    }
+
+    ArrayList<ArrayList<KeyPoint>> getRansacPairs(){
+        return ransacPairs;
     }
 
 }

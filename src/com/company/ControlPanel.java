@@ -5,8 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by agnie on 10/7/2016.
@@ -14,11 +12,13 @@ import java.util.ArrayList;
 class ControlPanel extends JPanel {
 
     private UserInterface userInterface;
-    private JLabel imageOneLabel, imageOneName, imageTwoLabel, imageTwoName;
-    private JButton imageOneButton, imageTwoButton, analyzeImageButton, showKeyPointsButton, showPairedKeyPointsButton, showNeighboursButton, showRansacButton;
+    private JLabel imageOneLabel, imageOneName, imageTwoLabel, imageTwoName, transformChoiceLabel, neighbourhoodSliderLabel, coherenceThresholdLabel, iterationsLabel, errorThresholdLabel;
+    private JButton imageOneButton, imageTwoButton, analyzeImageButton, showKeyPointsButton, showPairedKeyPointsButton, showNeighboursButton, showRansacButton, clearButton;
+    private JSlider neighbourhoodSizeSlider, coherenceThresholdSlider, ransacErrorThresholdSlider;
+    private JComboBox transformChoiceCombobox;
+    private JTextField iterationsTextfield;
     private File imageOne, imageTwo;
-    private ArrayList<KeyPoint> firstImageKeyPoints, secondImageKeyPoints;
-    private ArrayList<ArrayList<KeyPoint>> pairedKeyPoints, coherentPairs, ransacPairs;
+    private ImageAnalyser imageAnalyser;
 
 
     ControlPanel(UserInterface userInterface) {
@@ -34,36 +34,42 @@ class ControlPanel extends JPanel {
         setupImageTwoLabel();
         setupImageTwoName();
         setupImageTwoButton();
+        setupNeighbourhoodSliderLabel();
+        setupNeighbourhoodSizeSlider();
+        setupCoherenceThresholdLabel();
+        setupCoherenceThresholdSlider();
+        setupIterationsLabel();
+        setupIterationsTextField();
+        setupErrorThresholdLabel();
+        setupErrorThresholdSlider();
+        setupTransformChoiceLabel();
+        setupTransformChoiceComboBox();
         setupAnalyzeImageButton();
         setupShowKeyPointsButton();
         setupShowPairedKeyPointsButton();
         setupShowNeighboursButton();
         setupShowRansacButton();
+        setupClearButton();
+//        this.setBackground(new Color(71, 122, 132));
         this.setAlignmentX(LEFT_ALIGNMENT);
-        setBackground(Color.cyan);
         this.setVisible(true);
     }
 
     private void setupImageOneLabel() {
         imageOneLabel = new JLabel("First image: ");
         this.add(imageOneLabel);
-        imageOneLabel.setBackground(Color.ORANGE);
-        imageOneLabel.setOpaque(true);
         imageOneLabel.setPreferredSize(new Dimension(200, 20));
     }
 
     private void setupImageOneName() {
         imageOneName = new JLabel("Choose first image");
         this.add(imageOneName);
-        imageOneName.setBackground(Color.ORANGE);
-        imageOneName.setOpaque(true);
         imageOneName.setPreferredSize(new Dimension(200, 20));
     }
 
     private void setupImageTwoLabel() {
         imageTwoLabel = new JLabel("Second image: ");
         this.add(imageTwoLabel);
-        imageTwoLabel.setBackground(Color.ORANGE);
         imageTwoLabel.setPreferredSize(new Dimension(200, 20));
         imageTwoLabel.setVisible(false);
     }
@@ -71,10 +77,43 @@ class ControlPanel extends JPanel {
     private void setupImageTwoName() {
         imageTwoName = new JLabel("Choose second image");
         this.add(imageTwoName);
-        imageTwoName.setBackground(Color.ORANGE);
-        imageTwoName.setOpaque(true);
         imageTwoName.setPreferredSize(new Dimension(200, 20));
         imageTwoName.setVisible(false);
+    }
+
+    private void setupTransformChoiceLabel() {
+        transformChoiceLabel = new JLabel("Choose RANSAC transform");
+        this.add(transformChoiceLabel);
+        transformChoiceLabel.setPreferredSize(new Dimension(200, 20));
+        transformChoiceLabel.setVisible(false);
+    }
+
+    private void setupNeighbourhoodSliderLabel(){
+        neighbourhoodSliderLabel = new JLabel("Choose the size of neighbourhood");
+        this.add(neighbourhoodSliderLabel);
+        neighbourhoodSliderLabel.setPreferredSize(new Dimension(200, 20));
+        neighbourhoodSliderLabel.setVisible(false);
+    }
+
+    private void setupCoherenceThresholdLabel(){
+        coherenceThresholdLabel = new JLabel("Select the coherence threshold");
+        this.add(coherenceThresholdLabel);
+        coherenceThresholdLabel.setPreferredSize(new Dimension(200, 20));
+        coherenceThresholdLabel.setVisible(false);
+    }
+
+    private void setupIterationsLabel(){
+        iterationsLabel = new JLabel("Set number of iterations");
+        this.add(iterationsLabel);
+        iterationsLabel.setPreferredSize(new Dimension(200, 20));;
+        iterationsLabel.setVisible(false);
+    }
+
+    private void setupErrorThresholdLabel(){
+        errorThresholdLabel = new JLabel("Set error threshold");
+        this.add(errorThresholdLabel);
+        errorThresholdLabel.setPreferredSize(new Dimension(200, 20));
+        errorThresholdLabel.setVisible(false);
     }
 
     private void setupImageOneButton() {
@@ -94,7 +133,7 @@ class ControlPanel extends JPanel {
             }
         });
         this.add(imageOneButton);
-        imageOneButton.setPreferredSize(new Dimension(150, 20));
+        imageOneButton.setPreferredSize(new Dimension(200, 30));
         imageOneButton.setVisible(true);
     }
 
@@ -107,13 +146,23 @@ class ControlPanel extends JPanel {
                     FilePicker filePicker = new FilePicker();
                     imageTwo = filePicker.getFilePath();
                     imageTwoName.setText(imageTwo.getName());
+                    neighbourhoodSliderLabel.setVisible(true);
+                    neighbourhoodSizeSlider.setVisible(true);
+                    coherenceThresholdLabel.setVisible(true);
+                    coherenceThresholdSlider.setVisible(true);
+                    iterationsLabel.setVisible(true);
+                    iterationsTextfield.setVisible(true);
+                    errorThresholdLabel.setVisible(true);
+                    ransacErrorThresholdSlider.setVisible(true);
+                    transformChoiceLabel.setVisible(true);
+                    transformChoiceCombobox.setVisible(true);
                     analyzeImageButton.setVisible(true);
                     userInterface.displaySecondImage(imageTwo);
                 }
             }
         });
         this.add(imageTwoButton);
-        imageTwoButton.setPreferredSize(new Dimension(150, 20));
+        imageTwoButton.setPreferredSize(new Dimension(200, 30));
         imageTwoButton.setVisible(false);
     }
 
@@ -122,17 +171,22 @@ class ControlPanel extends JPanel {
         analyzeImageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                generateKeyPoints();
-                fetchKeyPoints();
-                findCommonPoints();
+                imageAnalyser = new ImageAnalyser();
+                imageAnalyser.generateKeyPoints(imageOne, imageTwo);
+                imageAnalyser.fetchKeyPoints(imageOne, imageTwo);
+                imageAnalyser.findCommonPoints(userInterface.getProblemSize());
+                showPairedKeyPointsButton.setVisible(true);
+                showNeighboursButton.setVisible(true);
+                showRansacButton.setVisible(true);
+                clearButton.setVisible(true);
             }
         });
         this.add(analyzeImageButton);
-        analyzeImageButton.setPreferredSize(new Dimension(150, 20));
+        analyzeImageButton.setPreferredSize(new Dimension(200, 30));
         analyzeImageButton.setVisible(false);
     }
 
-    private void setupShowKeyPointsButton(){
+    private void setupShowKeyPointsButton() {
         showKeyPointsButton = new JButton("Show Keypoints");
         showKeyPointsButton.addActionListener(new ActionListener() {
             @Override
@@ -141,89 +195,113 @@ class ControlPanel extends JPanel {
             }
         });
         this.add(showKeyPointsButton);
-        showKeyPointsButton.setPreferredSize(new Dimension(150,20));
+        showKeyPointsButton.setPreferredSize(new Dimension(200, 30));
         showKeyPointsButton.setVisible(false);
     }
 
-    private void setupShowPairedKeyPointsButton(){
+    private void setupShowPairedKeyPointsButton() {
         showPairedKeyPointsButton = new JButton("Show Pairs");
         showPairedKeyPointsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //todo
+                userInterface.getImagePanel().setPairedKeyPoints(imageAnalyser.getPairedKeyPoints());
             }
         });
         this.add(showPairedKeyPointsButton);
-        showPairedKeyPointsButton.setPreferredSize(new Dimension(150,20));
+        showPairedKeyPointsButton.setPreferredSize(new Dimension(200, 30));
         showPairedKeyPointsButton.setVisible(false);
     }
 
-    private void setupShowNeighboursButton(){
+    private void setupShowNeighboursButton() {
         showNeighboursButton = new JButton("Show Coherent Pairs");
         showNeighboursButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //todo
+                userInterface.getImagePanel().setCoherentKeyPoints(imageAnalyser.getCoherentPairs());
             }
         });
         this.add(showNeighboursButton);
-        showNeighboursButton.setPreferredSize(new Dimension(150,20));
+        showNeighboursButton.setPreferredSize(new Dimension(200, 30));
         showNeighboursButton.setVisible(false);
     }
 
-    private void setupShowRansacButton(){
+    private void setupShowRansacButton() {
         showRansacButton = new JButton("Show Ransac Pairs");
         showRansacButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //todo
+                userInterface.getImagePanel().setRansacKeyPoints(imageAnalyser.getRansacPairs());
             }
         });
         this.add(showRansacButton);
-        showRansacButton.setPreferredSize(new Dimension(150,20));
+        showRansacButton.setPreferredSize(new Dimension(200, 30));
         showRansacButton.setVisible(false);
     }
 
-
-    void generateKeyPoints() {
-        String imageOneName = imageOne.getName();
-        String imageTwoName = imageTwo.getName();
-        String commands[] = new String[2];
-        commands[0] = "c:/cygwin/bin/bash -l -c 'extract_features/extract_features.exe -haraff -sift -i extract_features/" + imageOneName + " -DE";
-        commands[1] = "c:/cygwin/bin/bash -l -c 'extract_features/extract_features.exe -haraff -sift -i extract_features/" + imageTwoName + " -DE";
-        System.out.println(imageOneName);
-        System.out.println(imageTwoName);
-        for (String command : commands) {
-            Runtime runtime = Runtime.getRuntime();
-            try {
-                Process process = runtime.exec(command);
-            } catch (IOException e) {
-                e.printStackTrace();
+    private void setupClearButton() {
+        clearButton = new JButton("Clear marks");
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                userInterface.getImagePanel().setPairedKeyPoints(null);
+                userInterface.getImagePanel().setCoherentKeyPoints(null);
+                userInterface.getImagePanel().setRansacKeyPoints(null);
             }
-        }
-
+        });
+        this.add(clearButton);
+        clearButton.setPreferredSize(new Dimension(200, 30));
+        clearButton.setVisible(false);
     }
 
-    void fetchKeyPoints() {
-        File firstKeyPointsFile = new File(imageOne.getAbsolutePath() + ".haraff.sift");
-        File secondKeyPointsFile = new File(imageTwo.getAbsolutePath() + ".haraff.sift");
-        ImageAnalyser imageAnalyser = new ImageAnalyser();
-        firstImageKeyPoints = imageAnalyser.getKeyPoints(firstKeyPointsFile);
-        secondImageKeyPoints = imageAnalyser.getKeyPoints(secondKeyPointsFile);
-        pairedKeyPoints = imageAnalyser.pairKeypoints(firstImageKeyPoints,secondImageKeyPoints);
+    private void setupTransformChoiceComboBox() {
+        String[] transforms = {"Affine transform", "Perspective transform"};
+        transformChoiceCombobox = new JComboBox(transforms);
+        transformChoiceCombobox.setPreferredSize(new Dimension(200, 30));
+        this.add(transformChoiceCombobox);
+        transformChoiceCombobox.setVisible(false);
     }
 
-    void findCommonPoints(){
-        NeighbourhoodAnalyser neighbourhoodAnalyser = new NeighbourhoodAnalyser(pairedKeyPoints);
-        int neighbourhoodSize = (int)pairedKeyPoints.size()/50;
-        coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, 0.6);
-        System.out.println("Coherence: " + coherentPairs.size()/pairedKeyPoints.size());
-        double smallRadius = 0.01 * userInterface.getProblemSize();
-        double largeRadius = 0.3 * userInterface.getProblemSize();
-        int errorThreshold = 50;
-        RANSAC ransac = new RANSAC(pairedKeyPoints, smallRadius, largeRadius, errorThreshold, 100);
-        ransacPairs = ransac.getMatchingPairs(0);
-        System.out.println("Ransac done");
+    private void setupNeighbourhoodSizeSlider() {
+            neighbourhoodSizeSlider = new JSlider(JSlider.HORIZONTAL, 2,8,5);
+             neighbourhoodSizeSlider.setMajorTickSpacing(2);
+            neighbourhoodSizeSlider.setMinorTickSpacing(1);
+            neighbourhoodSizeSlider.createStandardLabels(3, 2);
+            neighbourhoodSizeSlider.setSnapToTicks(true);
+            neighbourhoodSizeSlider.setPaintTicks(true);
+            neighbourhoodSizeSlider.setPaintLabels(true);
+            this.add(neighbourhoodSizeSlider);
+            neighbourhoodSizeSlider.setVisible(false);
+    }
+
+    private void setupCoherenceThresholdSlider() {
+        coherenceThresholdSlider = new JSlider(JSlider.HORIZONTAL, 5,9,6);
+        coherenceThresholdSlider.setMajorTickSpacing(2);
+        coherenceThresholdSlider.setMinorTickSpacing(1);
+        coherenceThresholdSlider.createStandardLabels(2,5);
+        coherenceThresholdSlider.setSnapToTicks(true);
+        coherenceThresholdSlider.setPaintTicks(true);
+        coherenceThresholdSlider.setPaintLabels(true);
+        this.add(coherenceThresholdSlider);
+        coherenceThresholdSlider.setVisible(false);
+    }
+
+    private void setupErrorThresholdSlider(){
+        ransacErrorThresholdSlider = new JSlider(JSlider.HORIZONTAL, 5,9,6);
+        ransacErrorThresholdSlider.setMajorTickSpacing(2);
+        ransacErrorThresholdSlider.setMinorTickSpacing(1);
+        ransacErrorThresholdSlider.createStandardLabels(2,5);
+        ransacErrorThresholdSlider.setSnapToTicks(true);
+        ransacErrorThresholdSlider.setPaintTicks(true);
+        ransacErrorThresholdSlider.setPaintLabels(true);
+        this.add(ransacErrorThresholdSlider);
+        ransacErrorThresholdSlider.setVisible(false);
+    }
+
+    private void setupIterationsTextField() {
+        iterationsTextfield = new JTextField("Set the number of iterations");
+        this.add(iterationsTextfield);
+        iterationsTextfield.setPreferredSize(new Dimension(200, 30));
+        iterationsTextfield.setVisible(false);
     }
 
 

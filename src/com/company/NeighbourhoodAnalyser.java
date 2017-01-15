@@ -66,8 +66,8 @@ public class NeighbourhoodAnalyser {
     }
 
     boolean isCoherent(ArrayList<KeyPoint> pair, int neighbourhoodSize, double threshold){
-        KeyPoint firstKeypoint = pair.get(0);
-        KeyPoint secondKeypoint = pair.get(1);
+//        KeyPoint firstKeypoint = pair.get(0);
+//        KeyPoint secondKeypoint = pair.get(1);
         ArrayList<ArrayList<KeyPoint>> firstPointNeighbours = searchNeighbours(pair, neighbourhoodSize, 0);
         ArrayList<ArrayList<KeyPoint>> secondPointNeighbours = searchNeighbours(pair, neighbourhoodSize, 1);
         ArrayList<ArrayList<KeyPoint>> commonNeigbours = (ArrayList<ArrayList<KeyPoint>>) firstPointNeighbours.clone();

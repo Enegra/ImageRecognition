@@ -62,15 +62,22 @@ class RANSAC {
         } else return getPerspectiveTransform();
     }
 
-    ArrayList<ArrayList<KeyPoint>> getStartingPoints(ArrayList<ArrayList<KeyPoint>> startingPoints) {
+    private ArrayList<ArrayList<KeyPoint>> getStartingPoints(ArrayList<ArrayList<KeyPoint>> startingPoints) {
+        int attempts = 20;
         Random random = new Random();
         if (startingPoints.isEmpty()) {
             ArrayList<KeyPoint> pair = pairedKeyPoints.get(random.nextInt(pairedKeyPoints.size()));
             startingPoints.add(pair);
         } else {
+            //problem here
             ArrayList<KeyPoint> pair = pairedKeyPoints.get(random.nextInt(pairedKeyPoints.size()));
-            while (startingPoints.contains(pair) || !isNear(pair, startingPoints)) {
+            while (startingPoints.contains(pair) || !isNear(pair, startingPoints)&&attempts>0) {
                 pair = pairedKeyPoints.get(random.nextInt(pairedKeyPoints.size()));
+                attempts--;
+            }
+            if (attempts==0 && startingPoints.size() < 2){
+                startingPoints.clear();
+                getStartingPoints(startingPoints);
             }
             startingPoints.add(pair);
         }
