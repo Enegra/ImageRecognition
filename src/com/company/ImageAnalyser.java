@@ -11,6 +11,7 @@ public class ImageAnalyser {
     private ArrayList<KeyPoint> firstImageKeyPoints, secondImageKeyPoints;
     private ArrayList<ArrayList<KeyPoint>> pairedKeyPoints, coherentPairs, ransacPairs;
     private int coherence;
+    private boolean isDone=false;
 
     private ArrayList<KeyPoint> getKeyPoints(File file){
         BufferedReader reader = null;
@@ -75,6 +76,7 @@ public class ImageAnalyser {
     }
 
     void generateKeyPoints(File imageOne, File imageTwo) {
+        isDone = false;
         String imageOneName = imageOne.getName();
         String imageTwoName = imageTwo.getName();
         String commands[] = new String[2];
@@ -90,10 +92,14 @@ public class ImageAnalyser {
                 e.printStackTrace();
             }
         }
-
+        isDone = true;
     }
 
     void fetchKeyPoints(File imageOne, File imageTwo) {
+        while (true){
+            if (isDone) break;
+            //go to a beach in San Escobar or something
+        }
         File firstKeyPointsFile = new File(imageOne.getAbsolutePath() + ".haraff.sift");
         File secondKeyPointsFile = new File(imageTwo.getAbsolutePath() + ".haraff.sift");
         firstImageKeyPoints = getKeyPoints(firstKeyPointsFile);

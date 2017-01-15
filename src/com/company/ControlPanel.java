@@ -193,7 +193,7 @@ class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 userInterface.getImagePanel().setFirstImageKeyPoints(imageAnalyser.getFirstImageKeyPoints());
-                userInterface.getImagePanel().setFirstImageKeyPoints(imageAnalyser.getSecondImageKeyPoints());
+                userInterface.getImagePanel().setSecondImageKeyPoints(imageAnalyser.getSecondImageKeyPoints());
             }
         });
         this.add(showKeyPointsButton);
