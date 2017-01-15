@@ -175,6 +175,7 @@ class ControlPanel extends JPanel {
                 imageAnalyser.generateKeyPoints(imageOne, imageTwo);
                 imageAnalyser.fetchKeyPoints(imageOne, imageTwo);
                 imageAnalyser.findCommonPoints(userInterface.getProblemSize());
+                showKeyPointsButton.setVisible(true);
                 showPairedKeyPointsButton.setVisible(true);
                 showNeighboursButton.setVisible(true);
                 showRansacButton.setVisible(true);
@@ -191,7 +192,8 @@ class ControlPanel extends JPanel {
         showKeyPointsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //todo
+                userInterface.getImagePanel().setFirstImageKeyPoints(imageAnalyser.getFirstImageKeyPoints());
+                userInterface.getImagePanel().setFirstImageKeyPoints(imageAnalyser.getSecondImageKeyPoints());
             }
         });
         this.add(showKeyPointsButton);
@@ -246,6 +248,8 @@ class ControlPanel extends JPanel {
                 userInterface.getImagePanel().setPairedKeyPoints(null);
                 userInterface.getImagePanel().setCoherentKeyPoints(null);
                 userInterface.getImagePanel().setRansacKeyPoints(null);
+                userInterface.getImagePanel().setFirstImageKeyPoints(null);
+                userInterface.getImagePanel().setSecondImageKeyPoints(null);
             }
         });
         this.add(clearButton);

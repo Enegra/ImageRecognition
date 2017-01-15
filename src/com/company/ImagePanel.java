@@ -25,6 +25,9 @@ public class ImagePanel extends JPanel {
     private ArrayList<ArrayList<KeyPoint>> coherentKeyPoints;
     private ArrayList<ArrayList<KeyPoint>> ransacKeyPoints;
 
+    private ArrayList<KeyPoint> firstImageKeyPoints;
+    private ArrayList<KeyPoint> secondImageKeyPoints;
+
     ImagePanel(int panelWidth, int panelHeight){
         this.panelWidth = panelWidth;
         this.panelHeight = panelHeight;
@@ -134,6 +137,25 @@ public class ImagePanel extends JPanel {
     }
 
 
+    private void drawKeyPoints(Graphics2D graphics2D){
+        if (firstImageKeyPoints!=null){
+            graphics2D.setColor(new Color(17, 214, 148));
+            for (KeyPoint keyPoint : firstImageKeyPoints){
+                int x = (int)keyPoint.getX()/imageOneScaleFactor;
+                int y = (int)keyPoint.getY()/imageOneScaleFactor;
+                graphics2D.drawLine(x,y,x,y);
+            }
+        }
+        if (secondImageKeyPoints!=null){
+//            graphics2D.setColor(new Color(95, 17, 214));
+            for (KeyPoint keyPoint : secondImageKeyPoints){
+                int x = (int)keyPoint.getX()/imageTwoScaleFactor;
+                int y = (int)keyPoint.getY()/imageTwoScaleFactor+imageOne.getHeight()+30;
+                graphics2D.drawLine(x,y,x,y);
+            }
+        }
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -143,6 +165,7 @@ public class ImagePanel extends JPanel {
         displayPairedKeyPoints(graphics2D);
         displayCoherentPairs(graphics2D);
         displayRansacPairs(graphics2D);
+        drawKeyPoints(graphics2D);
     }
 
     void setPairedKeyPoints(ArrayList<ArrayList<KeyPoint>> pairedKeyPoints) {
@@ -159,6 +182,18 @@ public class ImagePanel extends JPanel {
 
     void setRansacKeyPoints(ArrayList<ArrayList<KeyPoint>> ransacKeyPoints) {
         this.ransacKeyPoints = ransacKeyPoints;
+        revalidate();
+        repaint();
+    }
+
+    void setFirstImageKeyPoints(ArrayList<KeyPoint> firstImageKeyPoints){
+        this.firstImageKeyPoints=firstImageKeyPoints;
+        revalidate();
+        repaint();
+    }
+
+    void setSecondImageKeyPoints(ArrayList<KeyPoint> secondImageKeyPoints){
+        this.secondImageKeyPoints=secondImageKeyPoints;
         revalidate();
         repaint();
     }
