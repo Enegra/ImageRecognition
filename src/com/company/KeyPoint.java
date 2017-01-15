@@ -15,6 +15,12 @@ class KeyPoint {
         traits = new int[128];
     }
 
+    KeyPoint(KeyPoint otherPoint){
+        this.x = otherPoint.x;
+        this.y = otherPoint.y;
+        this.traits = otherPoint.traits;
+    }
+
     int[] getTraits(){
         return traits;
     }

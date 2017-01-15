@@ -149,7 +149,6 @@ public class ImagePanel extends JPanel {
         if (secondImageKeyPoints!=null){
 //            graphics2D.setColor(new Color(95, 17, 214));
             for (KeyPoint keyPoint : secondImageKeyPoints){
-                System.out.println(keyPoint);
                 int x = (int)keyPoint.getX()/imageTwoScaleFactor;
                 int y = (int)keyPoint.getY()/imageTwoScaleFactor+imageOne.getHeight()+30;
                 graphics2D.drawLine(x,y,x,y);

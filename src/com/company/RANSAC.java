@@ -110,6 +110,38 @@ class RANSAC {
     }
 
     private Matrix getAffineTransform() {
+        ArrayList<Matrix> affineMatrices = getAffineData();
+        while (affineMatrices.get(0).det()==0){
+            affineMatrices = getAffineData();
+        }
+        Matrix firstMatrix = affineMatrices.get(0).inverse();
+        Matrix unknowns = firstMatrix.times(affineMatrices.get(1));
+        double[][] affineMatrixData = {
+                {unknowns.get(0, 0), unknowns.get(1, 0), unknowns.get(2, 0)},
+                {unknowns.get(3, 0), unknowns.get(4, 0), unknowns.get(5, 0)},
+                {0, 0, 1}
+        };
+        Matrix affineMatrix = new Matrix(affineMatrixData);
+        return affineMatrix;
+    }
+
+    private Matrix getPerspectiveTransform() {
+        ArrayList<Matrix> perspectiveMatrices = getPerspectiveData();
+        while (perspectiveMatrices.get(0).det()==0){
+            perspectiveMatrices = getPerspectiveData();
+        }
+        Matrix firstMatrix = perspectiveMatrices.get(0).inverse();
+        Matrix unknowns = firstMatrix.times(perspectiveMatrices.get(1));
+        double[][] transformMatrixData = {
+                {unknowns.get(0, 0), unknowns.get(1, 0), unknowns.get(2, 0)},
+                {unknowns.get(3, 0), unknowns.get(4, 0), unknowns.get(5, 0)},
+                {unknowns.get(6, 0), unknowns.get(7, 0), 1},
+        };
+        Matrix transformMatrix = new Matrix(transformMatrixData);
+        return transformMatrix;
+    }
+
+    private ArrayList<Matrix> getAffineData(){
         ArrayList<ArrayList<KeyPoint>> startingPoints = new ArrayList<ArrayList<KeyPoint>>();
         for (int i = 0; i < 3; i++) {
             startingPoints = getStartingPoints(startingPoints);
@@ -133,18 +165,13 @@ class RANSAC {
         };
         Matrix firstMatrix = new Matrix(firstMatrixData);
         Matrix secondMatrix = new Matrix(secondMatrixData);
-        firstMatrix = firstMatrix.inverse();
-        Matrix unknowns = firstMatrix.times(secondMatrix);
-        double[][] affineMatrixData = {
-                {unknowns.get(0, 0), unknowns.get(1, 0), unknowns.get(2, 0)},
-                {unknowns.get(3, 0), unknowns.get(4, 0), unknowns.get(5, 0)},
-                {0, 0, 1}
-        };
-        Matrix affineMatrix = new Matrix(affineMatrixData);
-        return affineMatrix;
+        ArrayList<Matrix> matrices = new ArrayList<>();
+        matrices.add(firstMatrix);
+        matrices.add(secondMatrix);
+        return matrices;
     }
 
-    private Matrix getPerspectiveTransform() {
+    private ArrayList<Matrix> getPerspectiveData(){
         ArrayList<ArrayList<KeyPoint>> startingPoints = new ArrayList<ArrayList<KeyPoint>>();
         for (int i = 0; i < 4; i++) {
             startingPoints = getStartingPoints(startingPoints);
@@ -171,15 +198,10 @@ class RANSAC {
         };
         Matrix firstMatrix = new Matrix(firstMatrixData);
         Matrix secondMatrix = new Matrix(secondMatrixData);
-        firstMatrix = firstMatrix.inverse();
-        Matrix unknowns = firstMatrix.times(secondMatrix);
-        double[][] transformMatrixData = {
-                {unknowns.get(0, 0), unknowns.get(1, 0), unknowns.get(2, 0)},
-                {unknowns.get(3, 0), unknowns.get(4, 0), unknowns.get(5, 0)},
-                {unknowns.get(6, 0), unknowns.get(7, 0), 1},
-        };
-        Matrix transformMatrix = new Matrix(transformMatrixData);
-        return transformMatrix;
+        ArrayList<Matrix> matrices = new ArrayList<>();
+        matrices.add(firstMatrix);
+        matrices.add(secondMatrix);
+        return matrices;
     }
 
 }

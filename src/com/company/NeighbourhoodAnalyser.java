@@ -23,7 +23,7 @@ public class NeighbourhoodAnalyser {
             distances.add(distance);
         }
         quickSort(distances);
-        for (int i=1; i<neighbourhoodSize+1; i++){
+        for (int i=0; i<neighbourhoodSize; i++){
             neighbours.add(pairedKeyPoints.get(i));
         }
         return neighbours;
@@ -66,13 +66,10 @@ public class NeighbourhoodAnalyser {
     }
 
     boolean isCoherent(ArrayList<KeyPoint> pair, int neighbourhoodSize, double threshold){
-//        KeyPoint firstKeypoint = pair.get(0);
-//        KeyPoint secondKeypoint = pair.get(1);
         ArrayList<ArrayList<KeyPoint>> firstPointNeighbours = searchNeighbours(pair, neighbourhoodSize, 0);
         ArrayList<ArrayList<KeyPoint>> secondPointNeighbours = searchNeighbours(pair, neighbourhoodSize, 1);
-        ArrayList<ArrayList<KeyPoint>> commonNeigbours = (ArrayList<ArrayList<KeyPoint>>) firstPointNeighbours.clone();
-        commonNeigbours.retainAll(secondPointNeighbours);
-        double coherence = commonNeigbours.size()/firstPointNeighbours.size();
+        firstPointNeighbours.retainAll(secondPointNeighbours);
+        double coherence = firstPointNeighbours.size()/neighbourhoodSize;
         return coherence>=threshold;
     }
 

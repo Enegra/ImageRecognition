@@ -11,9 +11,8 @@ public class ImageAnalyser {
     private ArrayList<KeyPoint> firstImageKeyPoints, secondImageKeyPoints;
     private ArrayList<ArrayList<KeyPoint>> pairedKeyPoints, coherentPairs, ransacPairs;
     private int coherence;
-    private boolean isDone=false;
 
-    private ArrayList<KeyPoint> getKeyPoints(File file){
+    private ArrayList<KeyPoint> getKeyPoints(File file) {
         BufferedReader reader = null;
         ArrayList<KeyPoint> keyPoints = new ArrayList<KeyPoint>();
         try {
@@ -21,12 +20,12 @@ public class ImageAnalyser {
             String line = reader.readLine();
             while (line != null) {
                 String lineArray[] = line.split("\\s+");
-                if (lineArray.length>1){
+                if (lineArray.length > 1) {
                     double x = Double.parseDouble(lineArray[0]);
                     double y = Double.parseDouble(lineArray[1]);
-                    KeyPoint keyPoint = new KeyPoint(x,y);
-                    for (int i=5; i<lineArray.length; i++){
-                        keyPoint.setTrait(i-5, Integer.parseInt(lineArray[i]));
+                    KeyPoint keyPoint = new KeyPoint(x, y);
+                    for (int i = 5; i < lineArray.length; i++) {
+                        keyPoint.setTrait(i - 5, Integer.parseInt(lineArray[i]));
                     }
                     keyPoints.add(keyPoint);
                 }
@@ -48,24 +47,23 @@ public class ImageAnalyser {
         return keyPoints;
     }
 
-    private ArrayList<ArrayList<KeyPoint>> pairKeypoints(ArrayList<KeyPoint> firstImageKeyPoints, ArrayList<KeyPoint> secondImageKeypoints){
+    private ArrayList<ArrayList<KeyPoint>> pairKeypoints(ArrayList<KeyPoint> firstImageKeyPoints, ArrayList<KeyPoint> secondImageKeypoints) {
         ArrayList<ArrayList<KeyPoint>> pairedKeypoints = new ArrayList<ArrayList<KeyPoint>>();
-        for (int i=0; i<firstImageKeyPoints.size(); i++){
+        for (int i = 0; i < firstImageKeyPoints.size(); i++) {
             double minimum = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(0).getTraits());
             KeyPoint match = secondImageKeypoints.get(0);
             boolean obscure = false;
-            for (int j=1; j<secondImageKeypoints.size(); j++){
+            for (int j = 1; j < secondImageKeypoints.size(); j++) {
                 double distance = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(j).getTraits());
-                if (distance < minimum){
+                if (distance < minimum) {
                     obscure = false;
                     minimum = distance;
                     match = secondImageKeypoints.get(j);
-                }
-                else if (distance==minimum){
+                } else if (distance == minimum) {
                     obscure = true;
                 }
             }
-            if (!obscure){
+            if (!obscure) {
                 ArrayList<KeyPoint> pair = new ArrayList<KeyPoint>();
                 pair.add(firstImageKeyPoints.get(i));
                 pair.add(match);
@@ -76,7 +74,6 @@ public class ImageAnalyser {
     }
 
     void generateKeyPoints(File imageOne, File imageTwo) {
-        isDone = false;
         String imageOneName = imageOne.getName();
         String imageTwoName = imageTwo.getName();
         String commands[] = new String[2];
@@ -92,26 +89,30 @@ public class ImageAnalyser {
                 e.printStackTrace();
             }
         }
-        isDone = true;
     }
 
     void fetchKeyPoints(File imageOne, File imageTwo) {
-        while (true){
-            if (isDone) break;
-            //go to a beach in San Escobar or something
-        }
         File firstKeyPointsFile = new File(imageOne.getAbsolutePath() + ".haraff.sift");
         File secondKeyPointsFile = new File(imageTwo.getAbsolutePath() + ".haraff.sift");
+        while (!(firstKeyPointsFile.exists() && secondKeyPointsFile.exists())) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         firstImageKeyPoints = getKeyPoints(firstKeyPointsFile);
         secondImageKeyPoints = getKeyPoints(secondKeyPointsFile);
-        pairedKeyPoints = pairKeypoints(firstImageKeyPoints,secondImageKeyPoints);
+        System.out.println(firstImageKeyPoints.size());
+        System.out.println(secondImageKeyPoints.size());
+        pairedKeyPoints = pairKeypoints(firstImageKeyPoints, secondImageKeyPoints);
     }
 
-    void findCommonPoints(int problemSize){
+    void findCommonPoints(int problemSize) {
         NeighbourhoodAnalyser neighbourhoodAnalyser = new NeighbourhoodAnalyser(pairedKeyPoints);
-        int neighbourhoodSize = (int)pairedKeyPoints.size()/50;
-        coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, 0.6);
-        coherence =  coherentPairs.size()/pairedKeyPoints.size();
+        int neighbourhoodSize = (int) pairedKeyPoints.size() / 50;
+        coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, 0.8);
+        coherence = coherentPairs.size() / pairedKeyPoints.size();
         double smallRadius = 0.05 * problemSize;
         double largeRadius = 0.3 * problemSize;
         int errorThreshold = 50;
@@ -120,27 +121,27 @@ public class ImageAnalyser {
         System.out.println("Ransac done");
     }
 
-    int getCoherence(){
+    int getCoherence() {
         return coherence;
     }
 
-    ArrayList<KeyPoint> getFirstImageKeyPoints(){
+    ArrayList<KeyPoint> getFirstImageKeyPoints() {
         return firstImageKeyPoints;
     }
 
-    ArrayList<KeyPoint> getSecondImageKeyPoints(){
+    ArrayList<KeyPoint> getSecondImageKeyPoints() {
         return secondImageKeyPoints;
     }
 
-    ArrayList<ArrayList<KeyPoint>> getPairedKeyPoints(){
+    ArrayList<ArrayList<KeyPoint>> getPairedKeyPoints() {
         return pairedKeyPoints;
     }
 
-    ArrayList<ArrayList<KeyPoint>> getCoherentPairs(){
+    ArrayList<ArrayList<KeyPoint>> getCoherentPairs() {
         return coherentPairs;
     }
 
-    ArrayList<ArrayList<KeyPoint>> getRansacPairs(){
+    ArrayList<ArrayList<KeyPoint>> getRansacPairs() {
         return ransacPairs;
     }
 
