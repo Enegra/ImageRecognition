@@ -49,17 +49,31 @@ public class ImageAnalyser {
     }
 
     private ArrayList<ArrayList<KeyPoint>> pairKeypoints(ArrayList<KeyPoint> firstImageKeyPoints, ArrayList<KeyPoint> secondImageKeypoints) {
+        ArrayList<ArrayList<KeyPoint>> firstImagePairs = getPairs(firstImageKeyPoints,secondImageKeypoints);
+        ArrayList<ArrayList<KeyPoint>> secondImagePairs = getPairs(secondImageKeypoints,firstImageKeyPoints);
+        ArrayList<ArrayList<KeyPoint>> pairedKeypoints = new ArrayList<>();
+        for (int i = 0; i<firstImagePairs.size(); i++){
+            for (int j=0; j<secondImagePairs.size(); j++){
+                if (firstImagePairs.get(i).get(0).equals(secondImagePairs.get(j).get(1)) && firstImagePairs.get(i).get(1).equals(secondImagePairs.get(j).get(0))){
+                    pairedKeypoints.add(firstImagePairs.get(i));
+                }
+            }
+        }
+        return pairedKeypoints;
+    }
+
+    private ArrayList<ArrayList<KeyPoint>> getPairs(ArrayList<KeyPoint> firstImageKeyPoints, ArrayList<KeyPoint> secondImageKeyPoints){
         ArrayList<ArrayList<KeyPoint>> pairedKeypoints = new ArrayList<>();
         for (int i = 0; i < firstImageKeyPoints.size(); i++) {
-            double minimum = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(0).getTraits());
-            KeyPoint match = secondImageKeypoints.get(0);
+            double minimum = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeyPoints.get(0).getTraits());
+            KeyPoint match = secondImageKeyPoints.get(0);
             boolean obscure = false;
-            for (int j = 1; j < secondImageKeypoints.size(); j++) {
-                double distance = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeypoints.get(j).getTraits());
+            for (int j = 1; j < secondImageKeyPoints.size(); j++) {
+                double distance = Math.euclideanDistance(firstImageKeyPoints.get(i).getTraits(), secondImageKeyPoints.get(j).getTraits());
                 if (distance < minimum) {
                     obscure = false;
                     minimum = distance;
-                    match = secondImageKeypoints.get(j);
+                    match = secondImageKeyPoints.get(j);
                 } else if (distance == minimum) {
                     obscure = true;
                 }
