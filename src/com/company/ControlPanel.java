@@ -188,7 +188,7 @@ class ControlPanel extends JPanel {
                 JOptionPane.showMessageDialog(getParent(), "Calculating the keypoints of the selected images.", "Please wait.", JOptionPane.WARNING_MESSAGE);
                 analyseImages();
                 showDrawingButtons(true);
-                String message = "Time of executing neighbourhood algorithm: " + imageAnalyser.getNeighbourTime() + System.lineSeparator() +  "Time of executing ransac algorithm: " + imageAnalyser.getRansacTime();
+                String message = "Time of executing neighbourhood algorithm: " + imageAnalyser.getNeighbourTime() + System.lineSeparator() +  "Time of executing ransac algorithm: " + imageAnalyser.getRansacTime() + System.lineSeparator() + "First image keypoints: " + imageAnalyser.getFirstImageKeyPoints().size() + System.lineSeparator() + "Second image keypoints: " + imageAnalyser.getSecondImageKeyPoints().size() + System.lineSeparator() + "Paired keypoints: " + imageAnalyser.getPairedKeyPoints().size() + System.lineSeparator() + "Coherent pairs: " +imageAnalyser.getCoherentPairs().size() + System.lineSeparator() + "Ransac pairs: " + imageAnalyser.getRansacPairs().size();
                 JOptionPane.showMessageDialog(getParent(), message, "Calculating finished", JOptionPane.WARNING_MESSAGE);
             }
         });
