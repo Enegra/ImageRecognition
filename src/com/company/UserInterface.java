@@ -11,8 +11,8 @@ public class UserInterface extends JFrame {
 
     private ControlPanel controlPanel;
     private ImagePanel imagePanel;
-    private int frameWidth = 1230;
-    private int frameHeight = 820;
+    private int frameWidth = 1225;
+    private int frameHeight = 870;
 
     UserInterface() {
         prepareGUI();
@@ -32,13 +32,13 @@ public class UserInterface extends JFrame {
 
     private void displayControlPanel() {
         controlPanel = new ControlPanel(this);
-        controlPanel.setBounds(5, 5, 200, 800);
+        controlPanel.setBounds(5, 5, 200, 850);
         this.add(controlPanel);
     }
 
     private void displayImagePanel() {
-        imagePanel = new ImagePanel(1000, 800);
-        imagePanel.setBounds(210, 5, 1000, 800);
+        imagePanel = new ImagePanel(1000, 850);
+        imagePanel.setBounds(210, 0, 1000, 850);
         imagePanel.setBackground(new Color(184, 217, 224));
         this.add(imagePanel);
         imagePanel.setVisible(true);

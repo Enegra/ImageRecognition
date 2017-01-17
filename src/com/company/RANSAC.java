@@ -14,6 +14,7 @@ class RANSAC {
     private ArrayList<ArrayList<KeyPoint>> pairedKeyPoints;
     private double smallRadius, bigRadius;
     private int errorThreshold, numberOfIterations;
+    private int startPointHeuristic;
 
     RANSAC(ArrayList<ArrayList<KeyPoint>> pairedKeyPoints, double smallRadius, double bigRadius, int errorThreshold, int numberOfIterations) {
         this.pairedKeyPoints = pairedKeyPoints;
@@ -64,7 +65,7 @@ class RANSAC {
     private ArrayList<ArrayList<KeyPoint>> getStartingPoints(ArrayList<ArrayList<KeyPoint>> startingPoints) {
         int attempts = 20;
         Random random = new Random();
-        if (startingPoints.isEmpty()) {
+        if (startingPoints.isEmpty() || startPointHeuristic==0) {
             ArrayList<KeyPoint> pair = pairedKeyPoints.get(random.nextInt(pairedKeyPoints.size()));
             startingPoints.add(pair);
         } else {
@@ -201,6 +202,10 @@ class RANSAC {
         matrices.add(firstMatrix);
         matrices.add(secondMatrix);
         return matrices;
+    }
+
+    void setStartPointHeuristic(int startPointHeuristic){
+        this.startPointHeuristic=startPointHeuristic;
     }
 
 }

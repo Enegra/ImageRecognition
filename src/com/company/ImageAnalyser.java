@@ -11,6 +11,7 @@ public class ImageAnalyser {
     private ArrayList<KeyPoint> firstImageKeyPoints, secondImageKeyPoints;
     private ArrayList<ArrayList<KeyPoint>> pairedKeyPoints, coherentPairs, ransacPairs;
     private int coherence;
+    private int neighbourTime, ransacTime;
 
     private ArrayList<KeyPoint> getKeyPoints(File file) {
         BufferedReader reader = null;
@@ -106,19 +107,27 @@ public class ImageAnalyser {
         pairedKeyPoints = pairKeypoints(firstImageKeyPoints, secondImageKeyPoints);
     }
 
-    void findCommonPoints(int problemSize, int neighbourhoodSize, double coherenceThreshold, int iterationsNumber, double ransacError, int transformType) {
+    void runNeighbours(int neighbourhoodSize, double coherenceThreshold){
         NeighbourhoodAnalyser neighbourhoodAnalyser = new NeighbourhoodAnalyser(pairedKeyPoints);
         System.out.println(pairedKeyPoints.size());
         neighbourhoodSize = (int)(neighbourhoodSize*pairedKeyPoints.size() * 0.001);
+        long beforeTime = System.currentTimeMillis();
         coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, coherenceThreshold);
+        long afterTime = System.currentTimeMillis();
+        neighbourTime = (int)(afterTime-beforeTime);
         coherence = coherentPairs.size() / pairedKeyPoints.size();
+    }
+
+    void runRansac(int problemSize, int iterationsNumber, double ransacError, int transformType, int heuristic){
         double smallRadius = 0.05 * problemSize;
         double largeRadius = 0.3 * problemSize;
-        //(int)ransacError*pairedKeyPoints.size(
-        int errorThreshold = 30;
+        int errorThreshold = (int)(pairedKeyPoints.size()*ransacError);
         RANSAC ransac = new RANSAC(pairedKeyPoints, smallRadius, largeRadius, errorThreshold, iterationsNumber);
+        ransac.setStartPointHeuristic(heuristic);
+        long beforeTime = System.currentTimeMillis();
         ransacPairs = ransac.getMatchingPairs(transformType);
-        System.out.println("Ransac done");
+        long afterTime = System.currentTimeMillis();
+        ransacTime = (int)(afterTime-beforeTime);
     }
 
     int getCoherence() {
@@ -143,6 +152,14 @@ public class ImageAnalyser {
 
     ArrayList<ArrayList<KeyPoint>> getRansacPairs() {
         return ransacPairs;
+    }
+
+    int getNeighbourTime(){
+        return neighbourTime;
+    }
+
+    int getRansacTime(){
+        return ransacTime;
     }
 
 }
