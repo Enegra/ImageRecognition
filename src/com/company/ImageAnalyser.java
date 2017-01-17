@@ -79,8 +79,6 @@ public class ImageAnalyser {
         String commands[] = new String[2];
         commands[0] = "c:/cygwin/bin/bash -l -c 'extract_features/extract_features.exe -haraff -sift -i extract_features/" + imageOneName + " -DE";
         commands[1] = "c:/cygwin/bin/bash -l -c 'extract_features/extract_features.exe -haraff -sift -i extract_features/" + imageTwoName + " -DE";
-        System.out.println(imageOneName);
-        System.out.println(imageTwoName);
         for (String command : commands) {
             Runtime runtime = Runtime.getRuntime();
             try {
@@ -108,18 +106,18 @@ public class ImageAnalyser {
         pairedKeyPoints = pairKeypoints(firstImageKeyPoints, secondImageKeyPoints);
     }
 
-    void findCommonPoints(int problemSize) {
+    void findCommonPoints(int problemSize, int neighbourhoodSize, double coherenceThreshold, int iterationsNumber, double ransacError, int transformType) {
         NeighbourhoodAnalyser neighbourhoodAnalyser = new NeighbourhoodAnalyser(pairedKeyPoints);
         System.out.println(pairedKeyPoints.size());
-        int neighbourhoodSize = (int)(pairedKeyPoints.size() * 0.03);
-        System.out.println(neighbourhoodSize);
-        coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, 0.5);
+        neighbourhoodSize = (int)(neighbourhoodSize*pairedKeyPoints.size() * 0.001);
+        coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, coherenceThreshold);
         coherence = coherentPairs.size() / pairedKeyPoints.size();
         double smallRadius = 0.05 * problemSize;
         double largeRadius = 0.3 * problemSize;
-        int errorThreshold = 50;
-        RANSAC ransac = new RANSAC(pairedKeyPoints, smallRadius, largeRadius, errorThreshold, 100);
-        ransacPairs = ransac.getMatchingPairs(1);
+        //(int)ransacError*pairedKeyPoints.size(
+        int errorThreshold = 30;
+        RANSAC ransac = new RANSAC(pairedKeyPoints, smallRadius, largeRadius, errorThreshold, iterationsNumber);
+        ransacPairs = ransac.getMatchingPairs(transformType);
         System.out.println("Ransac done");
     }
 

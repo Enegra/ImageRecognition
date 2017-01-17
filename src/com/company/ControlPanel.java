@@ -106,7 +106,6 @@ class ControlPanel extends JPanel {
         iterationsLabel = new JLabel("Set number of iterations");
         this.add(iterationsLabel);
         iterationsLabel.setPreferredSize(new Dimension(200, 20));
-        ;
         iterationsLabel.setVisible(false);
     }
 
@@ -172,20 +171,39 @@ class ControlPanel extends JPanel {
         analyzeImageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                imageAnalyser = new ImageAnalyser();
-                imageAnalyser.generateKeyPoints(imageOne, imageTwo);
-                imageAnalyser.fetchKeyPoints(imageOne, imageTwo);
-                imageAnalyser.findCommonPoints(userInterface.getProblemSize());
-                showKeyPointsButton.setVisible(true);
-                showPairedKeyPointsButton.setVisible(true);
-                showNeighboursButton.setVisible(true);
-                showRansacButton.setVisible(true);
-                clearButton.setVisible(true);
+                analyseImages();
+                showDrawingButtons();
             }
         });
         this.add(analyzeImageButton);
         analyzeImageButton.setPreferredSize(new Dimension(200, 30));
         analyzeImageButton.setVisible(false);
+    }
+
+    private void analyseImages(){
+        int neighbourhoodSize = neighbourhoodSizeSlider.getValue();
+        double coherenceThreshold = coherenceThresholdSlider.getValue()/10;
+        int ransacIterations;
+        if (!iterationsTextfield.getText().matches("\\d+$")){
+            ransacIterations = 100;
+        } else {
+            ransacIterations = Integer.parseInt(iterationsTextfield.getText());
+        }
+        double ransacError = ransacErrorThresholdSlider.getValue()/1000;
+        System.out.println(ransacErrorThresholdSlider.getValue());
+        int ransacTransform = transformChoiceCombobox.getSelectedIndex();
+        imageAnalyser = new ImageAnalyser();
+        imageAnalyser.generateKeyPoints(imageOne, imageTwo);
+        imageAnalyser.fetchKeyPoints(imageOne, imageTwo);
+        imageAnalyser.findCommonPoints(userInterface.getProblemSize(), neighbourhoodSize, coherenceThreshold, ransacIterations, ransacError, ransacTransform);
+    }
+
+    private void showDrawingButtons(){
+        showKeyPointsButton.setVisible(true);
+        showPairedKeyPointsButton.setVisible(true);
+        showNeighboursButton.setVisible(true);
+        showRansacButton.setVisible(true);
+        clearButton.setVisible(true);
     }
 
     private void setupShowKeyPointsButton() {
@@ -262,6 +280,7 @@ class ControlPanel extends JPanel {
         String[] transforms = {"Affine transform", "Perspective transform"};
         transformChoiceCombobox = new JComboBox(transforms);
         transformChoiceCombobox.setPreferredSize(new Dimension(200, 30));
+        transformChoiceCombobox.setSelectedIndex(0);
         this.add(transformChoiceCombobox);
         transformChoiceCombobox.setVisible(false);
     }
@@ -270,7 +289,7 @@ class ControlPanel extends JPanel {
         neighbourhoodSizeSlider = new JSlider(JSlider.HORIZONTAL, 2, 8, 5);
         neighbourhoodSizeSlider.setMajorTickSpacing(2);
         neighbourhoodSizeSlider.setMinorTickSpacing(1);
-        neighbourhoodSizeSlider.createStandardLabels(3, 2);
+        neighbourhoodSizeSlider.createStandardLabels(2);
         neighbourhoodSizeSlider.setSnapToTicks(true);
         neighbourhoodSizeSlider.setPaintTicks(true);
         neighbourhoodSizeSlider.setPaintLabels(true);
@@ -279,10 +298,10 @@ class ControlPanel extends JPanel {
     }
 
     private void setupCoherenceThresholdSlider() {
-        coherenceThresholdSlider = new JSlider(JSlider.HORIZONTAL, 5, 9, 6);
+        coherenceThresholdSlider = new JSlider(JSlider.HORIZONTAL, 4, 9, 6);
         coherenceThresholdSlider.setMajorTickSpacing(2);
         coherenceThresholdSlider.setMinorTickSpacing(1);
-        coherenceThresholdSlider.createStandardLabels(2, 5);
+        coherenceThresholdSlider.createStandardLabels(5);
         coherenceThresholdSlider.setSnapToTicks(true);
         coherenceThresholdSlider.setPaintTicks(true);
         coherenceThresholdSlider.setPaintLabels(true);
@@ -291,10 +310,10 @@ class ControlPanel extends JPanel {
     }
 
     private void setupErrorThresholdSlider() {
-        ransacErrorThresholdSlider = new JSlider(JSlider.HORIZONTAL, 5, 9, 6);
-        ransacErrorThresholdSlider.setMajorTickSpacing(2);
+        ransacErrorThresholdSlider = new JSlider(JSlider.HORIZONTAL, 5, 65, 10);
+        ransacErrorThresholdSlider.setMajorTickSpacing(10);
         ransacErrorThresholdSlider.setMinorTickSpacing(1);
-        ransacErrorThresholdSlider.createStandardLabels(2, 5);
+        ransacErrorThresholdSlider.createStandardLabels(5);
         ransacErrorThresholdSlider.setSnapToTicks(true);
         ransacErrorThresholdSlider.setPaintTicks(true);
         ransacErrorThresholdSlider.setPaintLabels(true);
