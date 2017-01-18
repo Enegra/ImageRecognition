@@ -124,7 +124,7 @@ public class ImageAnalyser {
     void runNeighbours(int neighbourhoodSize, double coherenceThreshold){
         NeighbourhoodAnalyser neighbourhoodAnalyser = new NeighbourhoodAnalyser(pairedKeyPoints);
         System.out.println(pairedKeyPoints.size());
-        neighbourhoodSize = (int)(neighbourhoodSize*pairedKeyPoints.size() * 0.001);
+        neighbourhoodSize = (int)(neighbourhoodSize*pairedKeyPoints.size() * 0.01);
         long beforeTime = System.currentTimeMillis();
         coherentPairs = neighbourhoodAnalyser.coherentPairs(neighbourhoodSize, coherenceThreshold);
         long afterTime = System.currentTimeMillis();

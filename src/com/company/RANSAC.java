@@ -37,23 +37,29 @@ class RANSAC {
     }
 
     Matrix getTransformModel(int transformType) {
-        Matrix bestTransformModel = null;
-        int highScore = 0;
+        Matrix bestTransformModel = getTransform(transformType);
+        int highScore = evaluateTransform(bestTransformModel);
         for (int i = 0; i < numberOfIterations; i++) {
             Matrix transformModel = getTransform(transformType);
-            int score = 0;
-            for (ArrayList<KeyPoint> pair : pairedKeyPoints) {
-                double errorValue = getErrorValue(pair, transformModel);
-                if (errorValue < errorThreshold) {
-                    score++;
-                }
-            }
+            int score = evaluateTransform(transformModel);
+
             if (score > highScore) {
                 bestTransformModel = transformModel;
                 highScore = score;
             }
         }
         return bestTransformModel;
+    }
+
+    private int evaluateTransform(Matrix transformModel){
+        int score = 0;
+        for (ArrayList<KeyPoint> pair : pairedKeyPoints) {
+            double errorValue = getErrorValue(pair, transformModel);
+            if (errorValue < errorThreshold) {
+                score++;
+            }
+        }
+        return score;
     }
 
     private Matrix getTransform(int transformType) {
